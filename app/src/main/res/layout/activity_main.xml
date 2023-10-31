@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+
+    <TextView
+        android:id="@+id/tvBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/ivTitle"
+        tools:layout_editor_absoluteX="188dp"
+        tools:text="by" />
+
+    <ImageView
+        android:id="@+id/ivTitle"
+        android:layout_width="382dp"
+        android:layout_height="177dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/Titulo"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="13dp" />
+
+    <ImageView
+        android:id="@+id/ivLogoKotders"
+        android:layout_width="148dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/LogoKotders"
+        app:layout_constraintTop_toBottomOf="@+id/tvBy"
+        tools:layout_editor_absoluteX="131dp" />
+
+    <ImageButton
+        android:id="@+id/ibStart"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ButtonPlay"
+        app:layout_constraintTop_toBottomOf="@+id/ivLogoKotders"
+        tools:layout_editor_absoluteX="130dp" />
+
+    <TextView
+        android:id="@+id/tvPlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Play"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/ibStart"
+        tools:layout_editor_absoluteX="186dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
