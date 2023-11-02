@@ -14,14 +14,4 @@ class Game(
     var timeStamp: Date
 ) {
 
-    // Constructor
-    init {
-        this.gameId = gameId
-        this.playerId = playerId
-        this.opponentGesture = opponentGesture
-        this.playerGesture = playerGesture
-        this.result = result
-        this.coinsChange = coinsChange
-        this.timeStamp = timeStamp
-    }
 }
