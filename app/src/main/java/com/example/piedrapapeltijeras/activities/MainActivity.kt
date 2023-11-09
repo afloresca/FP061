@@ -20,9 +20,14 @@ class MainActivity : AppCompatActivity() {
 
         initGame()
 
+
+        // Constantes del bottom navigation
         val optionsFragment = OptionsFragment()
         val languageFragment = LanguageFragment()
         val googlePlayFragment = GooglePlayFragment()
+
+        /**
+         *
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
@@ -44,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+        */
     }
 
     fun initGame(){
@@ -54,10 +60,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setCurrentFragment(fragment: Fragment){
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.ContainerView, fragment)
-            commit()
-        }
     }
-}

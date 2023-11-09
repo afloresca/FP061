@@ -4,34 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFEA00"
     tools:context=".activities.MainActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/ContainerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        app:menu="@menu/bottom_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_menu" />
 
     <TextView
         android:id="@+id/tvBy"
-        android:layout_width="21dp"
-        android:layout_height="17dp"
+        android:layout_width="28dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="10dp"
         android:text="TextView"
-        android:textSize="15sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/ivLogoKotders"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -42,9 +35,9 @@
 
     <ImageView
         android:id="@+id/ivTitle"
-        android:layout_width="405dp"
-        android:layout_height="245dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="446dp"
+        android:layout_height="310dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/titulo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -66,12 +59,13 @@
         android:id="@+id/ibStart"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
+        android:background="#FFEA00"
+        android:contentDescription="Iniciar juego"
         android:scaleType="fitCenter"
         android:src="@drawable/baseline_play_circle_24"
-        android:contentDescription="Iniciar juego"
+        android:tint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivLogoKotders" />
 
@@ -81,7 +75,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="Play"
-        android:textSize="20sp"
+        android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
