@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/logouoc"
+        android:layout_width="150dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:src="@drawable/image_photoroom_png_photoroom" />
+
+
+    <ImageView
+        android:id="@+id/logojuego"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:src="@drawable/ppt" />
+
+
+    <Button
+        android:id="@+id/btjugar"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#00BCD4"
+        android:fontFamily="@font/annie_use_your_telescope"
+        android:text="Jugar"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textSize="42sp"
+        android:textStyle="bold" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <Button
+        android:id="@+id/bthistorico"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#E91E63"
+        android:fontFamily="@font/annie_use_your_telescope"
+        android:text="Historico"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+
+    <ImageView
+        android:id="@+id/logogrupo"
+        android:layout_width="100dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:src="@drawable/continuar_1_" />
+
+
+</LinearLayout>
