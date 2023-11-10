@@ -30,7 +30,7 @@ class SecondActivity : AppCompatActivity() {
         dbHandler.addPlayer(playerName, "0")
 
         //
-        val intent = Intent(this, GameActivity::class.java)
+        val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
     }
 

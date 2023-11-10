@@ -23,20 +23,20 @@
         android:layout_width="28dp"
         android:layout_height="31dp"
         android:layout_marginTop="10dp"
-        android:text="TextView"
+        android:text="by"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/ivLogoKotders"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivTitle"
-        app:layout_constraintVertical_bias="0.5"
-        tools:text="by" />
+        app:layout_constraintVertical_bias="0.5" />
 
     <ImageView
         android:id="@+id/ivTitle"
-        android:layout_width="446dp"
-        android:layout_height="310dp"
+        android:layout_width="384dp"
+        android:layout_height="222dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/titulo"
         app:layout_constraintEnd_toEndOf="parent"

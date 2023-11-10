@@ -3,6 +3,7 @@ package com.example.piedrapapeltijeras.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import com.example.piedrapapeltijeras.R
@@ -10,6 +11,7 @@ import com.example.piedrapapeltijeras.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    val TAG = "MainActivity"
 
     private lateinit var binding : ActivityMainBinding
 
@@ -19,37 +21,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initGame()
+        Log.d(TAG, "Iniciando juego")
 
-
-        // Constantes del bottom navigation
-        val optionsFragment = OptionsFragment()
-        val languageFragment = LanguageFragment()
-        val googlePlayFragment = GooglePlayFragment()
-
-        /**
-         *
-
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.nav_options -> {
-                    setCurrentFragment(optionsFragment)
-                    true
-                }
-
-                R.id.nav_language -> {
-                    setCurrentFragment(languageFragment)
-                    true
-                }
-
-                R.id.nav_googleplay -> {
-                    setCurrentFragment(googlePlayFragment)
-                    true
-                }
-
-                else -> false
-            }
-        }
-        */
     }
 
     fun initGame(){

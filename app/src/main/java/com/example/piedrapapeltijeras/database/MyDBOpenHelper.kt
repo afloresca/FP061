@@ -36,6 +36,7 @@ SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
         try {
             // Crear la tabla Players
+            Log.d(TAG, "Creando la tabla Players...")
             val createTablePlayers = "CREATE TABLE $TABLE_PLAYERS " +
                     "($COLUMN_PLAYER_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_NAME TEXT, " +
@@ -43,6 +44,7 @@ SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
             db!!.execSQL(createTablePlayers)
 
             // Crear la tabla Games
+            Log.d(TAG, "Creando la tabla Games...")
             val createTableGames = "CREATE TABLE $TABLE_GAMES " +
                     "($COLUMN_GAME_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_PLAYER_ID INTEGER," +
@@ -53,6 +55,7 @@ SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
                     "$COLUMN_TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP, " +
                     "FOREIGN KEY($COLUMN_PLAYER_ID) REFERENCES $TABLE_PLAYERS($COLUMN_PLAYER_ID))"
             db.execSQL(createTableGames)
+            Log.d(TAG, "¡Tablas creadas correctamente!")
         } catch (e: SQLiteException) {
             Log.e("$TAG (onCreate)", e.message.toString())
         }
@@ -92,7 +95,9 @@ SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
 
         // Se abre la BD en modo escritura
         val db = this.writableDatabase
+        Log.d("$TAG(onOpen)", "Añadiendo jugador")
         db.insert(TABLE_PLAYERS, null, data)
+        Log.d("$TAG (onOpen)", "¡¡Jugador creado correctamente !!")
         db.close()
     }
 
