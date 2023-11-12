@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PiedraPapelTijeras"
+rootProject.name = "PPT_Kotders"
 include(":app")
