@@ -1,17 +1,12 @@
 package com.example.ppt_kotders
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.appcompat.app.AppCompatActivity
 
 class Juego : AppCompatActivity() {
 
@@ -36,7 +31,6 @@ class Juego : AppCompatActivity() {
 
             var puntj = 0 // Establecemos los puntuajes a 0
             var puntm = 0
-            var turnoMaquina = false
             var result = 0
 
             PiedraBT.setOnClickListener {
