@@ -29,18 +29,22 @@ class MainActivity : ComponentActivity() {
         loginbt.setOnClickListener(){
 
             var nombreplayer =inserttxt.text.toString()
-            var id = MyDBOpenHelper.getUserID(nombreplayer)
 
-            if(id==0){ // Si existe el 1er jug guarda el id y accede automatico
-                MyDBOpenHelper.addPlayer(nombreplayer, 0)
+            if(nombreplayer==""){
+                textview.text = " Introduce un nombre"
+            } else {
+                var id = MyDBOpenHelper.getUserID(nombreplayer)
 
-                // Establecer filtro login
+                if (id == 0) { // Si existe el 1er jug guarda el id y accede automatico
+                    MyDBOpenHelper.addPlayer(nombreplayer, 0)
+                    // Establecer filtro login
+                }
+
+                id = MyDBOpenHelper.getUserID(nombreplayer)
+                val intent = Intent(this, Menu::class.java)
+                intent.putExtra("Jugador_ID", id)
+                startActivity(intent)
             }
-
-            id = MyDBOpenHelper.getUserID(nombreplayer)
-            val intent = Intent(this, Menu::class.java)
-            intent.putExtra("Jugador_ID", id)
-            startActivity(intent)
 
         }
 

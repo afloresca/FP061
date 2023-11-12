@@ -1,5 +1,6 @@
 package com.example.ppt_kotders
 
+import MyDBOpenHelper
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -12,8 +13,16 @@ class Juego : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-
             setContentView(R.layout.juego)
+
+        val MyDBOpenHelper = MyDBOpenHelper(this,null)
+        val idUser = intent.getIntExtra("Jugador_ID",-1)
+        if(idUser == -1){ // LogOut de seguridad
+            val intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
+        }
+        val jugador = MyDBOpenHelper.getUser(idUser)
+
 
             // Bottones jugador
             val PiedraBT = findViewById<ImageButton>(R.id.btpiedra)
@@ -33,6 +42,8 @@ class Juego : AppCompatActivity() {
             var puntm = 0
             var result = 0
 
+            contadortv.text = idUser.toString()
+
             PiedraBT.setOnClickListener {
                 imgJugador.setImageResource(R.drawable.piedra)
                 imgMaquina.setImageResource(playMachine())
@@ -48,9 +59,30 @@ class Juego : AppCompatActivity() {
 
             salir.setOnClickListener {
                 val intent = Intent(this,Menu::class.java)
+                intent.putExtra("Jugador_ID",idUser)
                 startActivity(intent)
             }
+
+        fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
+            // Registra partida
+            MyDBOpenHelper.addGame(jugador.nombre.toString(),"Victoria")
+            MyDBOpenHelper.updatePoints(jugador)
+
+            val intent = Intent(this,SolucionJuego::class.java)
+            intent.putExtra("Resultado","v")
+            intent.putExtra("Jugador_ID",idUser)
+            startActivity(intent)
+        }
+
+        fun lose(){
+            MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
+            val intent = Intent(this,SolucionJuego::class.java)
+            intent.putExtra("Resultado","d")
+            intent.putExtra("Jugador_ID",idUser)
+            startActivity(intent)
+        }
     }
+
 }
 
 fun playMachine() : Int {
