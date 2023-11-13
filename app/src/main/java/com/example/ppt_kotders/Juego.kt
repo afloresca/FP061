@@ -47,7 +47,7 @@ class Juego : AppCompatActivity() {
         var puntj = 0 // Establecemos los puntuajes a 0
         var puntm = 0
         var rondasJugadas = 1
-        var rondasMaximas = 4
+        var rondasMaximas = 3
 
         //contadortv.text = idUser.toString()
 
@@ -68,20 +68,20 @@ class Juego : AppCompatActivity() {
         }
 
         fun getDrawableResource(result: Int) : Int {
+            Log.d("$TAG", "Se ha actualizado la elección del gesto")
             return when (result) {
-                0 -> R.drawable.papel
-                1 -> R.drawable.piedra
+                0 -> R.drawable.piedra
+                1 -> R.drawable.papel
                 2 -> R.drawable.tijera
                 else -> R.drawable.incognito
             }
-            Log.d("$TAG", "Se ha actualizado la elección de gesto")
         }
 
         fun determineWinner(eleccionMaquina: Int, eleccionJugador: Int) {
-            if (rondasJugadas < rondasMaximas){
-                if ((eleccionJugador == 0 && eleccionMaquina == 1) ||
-                    (eleccionJugador == 1 && eleccionMaquina == 2) ||
-                    (eleccionJugador == 2 && eleccionMaquina == 0)
+            if (rondasJugadas <= rondasMaximas && (puntm < 3 && puntj < 3)){
+                if ((eleccionJugador == 0 && eleccionMaquina == 2) ||
+                    (eleccionJugador == 1 && eleccionMaquina == 0) ||
+                    (eleccionJugador == 2 && eleccionMaquina == 1)
                 ) {
                     // Si gana el jugador
                     EstadoTV.text = "VICTORIA"

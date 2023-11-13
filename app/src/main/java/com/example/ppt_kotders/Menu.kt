@@ -36,7 +36,7 @@ class Menu : AppCompatActivity() {
 
         jugarBt.setOnClickListener {
             val intent = Intent(this, Juego::class.java)
-            intent.putExtra("Jugador_ID", idUser) // Adjuntar el ID del jugador al Intent
+           // intent.putExtra("Jugador_ID", idUser) // Adjuntar el ID del jugador al Intent
             startActivity(intent)
 
         }
