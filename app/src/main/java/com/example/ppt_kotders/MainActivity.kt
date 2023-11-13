@@ -1,6 +1,6 @@
-package com.example.ppt_kotders.activities
+package com.example.ppt_kotders
 
-import com.example.ppt_kotders.database.MyDBOpenHelper
+import MyDBOpenHelper
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -11,14 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.ppt_kotders.R
-import com.example.ppt_kotders.UserSingelton
 import com.example.ppt_kotders.ui.theme.PPT_KotdersTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.inicio)
 
         val loginbt = findViewById<Button>(R.id.btlog)
         val inserttxt = findViewById<EditText>(R.id.editTextText2)
@@ -43,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 id = MyDBOpenHelper.getUserID(nombreplayer)
-                val intent = Intent(this, MenuActivity::class.java)
+                val intent = Intent(this, Menu::class.java)
                 UserSingelton.id = id
                 //intent.putExtra("Jugador_ID", id)
                 startActivity(intent)
