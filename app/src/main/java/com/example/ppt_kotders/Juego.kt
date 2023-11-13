@@ -19,12 +19,11 @@ class Juego : AppCompatActivity() {
         setContentView(R.layout.juego)
 
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
-        val idUser = intent.getIntExtra("Jugador_ID",-1)
+        val idUser = UserSingelton.id
 
         if(idUser == -1){ // LogOut de seguridad
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
-            finish() // Asegúrate de finalizar la actividad actual después de iniciar la nueva
             return
         }
 
@@ -47,10 +46,10 @@ class Juego : AppCompatActivity() {
 
         var puntj = 0 // Establecemos los puntuajes a 0
         var puntm = 0
-        var rondasJugadas = 0
-        var rondasMaximas = 3
+        var rondasJugadas = 1
+        var rondasMaximas = 4
 
-        contadortv.text = idUser.toString()
+        //contadortv.text = idUser.toString()
 
         fun updateCountRound(){
             contadortv.text = rondasJugadas.toString()
@@ -88,7 +87,9 @@ class Juego : AppCompatActivity() {
                     EstadoTV.text = "VICTORIA"
                     puntj++
                     Log.d(TAG, "El jugador ha ganado")
-                } else if (eleccionJugador == eleccionMaquina){
+                } else if ((eleccionJugador == 0 && eleccionMaquina == 0) ||
+                        (eleccionJugador == 1 && eleccionMaquina == 1) ||
+                        (eleccionJugador == 2 && eleccionMaquina == 2)){
                     // Si empata el jugador
                     EstadoTV.text = "EMPATE"
                     Log.d(TAG, "El juego ha quedado en empate")
