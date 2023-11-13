@@ -52,18 +52,16 @@ class Juego : AppCompatActivity() {
 
         contadortv.text = idUser.toString()
 
-        salir.setOnClickListener {
-            val intent = Intent(this,Menu::class.java)
-            intent.putExtra("Jugador_ID",idUser)
-            startActivity(intent)
-        }
-
         fun updateCountRound(){
             contadortv.text = rondasJugadas.toString()
+            Log.d("$TAG", "Se ha actualizado el contador de rondas")
         }
 
         fun updateCountPlayers(){
-            
+            ContJtv.text = puntj.toString()
+            Log.d("$TAG", "Se ha actualizado el contador de victorias del jugador")
+            ContMtv.text = puntm.toString()
+            Log.d("$TAG", "Se ha actualizado el contador de victorias de la máquina")
         }
 
         fun playMachine(): Int{
@@ -77,19 +75,37 @@ class Juego : AppCompatActivity() {
                 2 -> R.drawable.tijera
                 else -> R.drawable.incognito
             }
+            Log.d("$TAG", "Se ha actualizado la elección de gesto")
         }
 
         fun determineWinner(eleccionMaquina: Int, eleccionJugador: Int) {
-            if ((eleccionJugador == 0 && eleccionMaquina == 1) ||
-                (eleccionJugador == 1 && eleccionMaquina == 2) ||
-                (eleccionJugador == 2 && eleccionMaquina == 0)
-            ) {
-                TODO() // Si gana el jugador
-            } else if (eleccionJugador == eleccionMaquina){
-                TODO() // Si empata el jugador
-            } else {
-                TODO() // Si pierde el jugador
+            while (rondasJugadas <= rondasMaximas){
+                if ((eleccionJugador == 0 && eleccionMaquina == 1) ||
+                    (eleccionJugador == 1 && eleccionMaquina == 2) ||
+                    (eleccionJugador == 2 && eleccionMaquina == 0)
+                ) {
+                    // Si gana el jugador
+                    EstadoTV.text = "VICTORIA"
+                    puntj++
+                    rondasJugadas++
+                    Log.d(TAG, "El jugador ha ganado")
+                } else if (eleccionJugador == eleccionMaquina){
+                    // Si empata el jugador
+                    EstadoTV.text = "EMPATE"
+                    rondasJugadas++
+                    Log.d(TAG, "El juego ha quedado en empate")
+                } else {
+                    // Si pierde el jugador
+                    EstadoTV.text = "DERROTA"
+                    puntm++
+                    rondasJugadas++
+                    Log.d(TAG, "El jugador ha perdido")
+                }
+
+                updateCountRound()
+                updateCountPlayers()
             }
+
         }
 
         PiedraBT.setOnClickListener {
@@ -97,7 +113,6 @@ class Juego : AppCompatActivity() {
             imgJugador.setImageResource(R.drawable.piedra)
             imgMaquina.setImageResource(getDrawableResource(result))
             determineWinner(result,0)
-            updateCountRound()
         }
         PapelBT.setOnClickListener {
             val result = playMachine()
@@ -136,6 +151,6 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Resultado",0)
             startActivity(intent)
         }
-
 }
+
 }
