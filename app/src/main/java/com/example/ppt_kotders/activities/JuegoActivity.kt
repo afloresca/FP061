@@ -1,6 +1,6 @@
-package com.example.ppt_kotders
+package com.example.ppt_kotders.activities
 
-import MyDBOpenHelper
+import com.example.ppt_kotders.database.MyDBOpenHelper
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ppt_kotders.R
 
 class Juego : AppCompatActivity() {
 
@@ -15,12 +16,12 @@ class Juego : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            setContentView(R.layout.juego)
+            setContentView(R.layout.activity_juego)
 
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
         val idUser = intent.getIntExtra("Jugador_ID",-1)
         if(idUser == -1){ // LogOut de seguridad
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish() // Asegúrate de finalizar la actividad actual después de iniciar la nueva
             return
@@ -55,7 +56,7 @@ class Juego : AppCompatActivity() {
             PapelBT.setOnClickListener {
 
                 MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
-                val intent = Intent(this,SolucionJuego::class.java)
+                val intent = Intent(this, SolucionJuego::class.java)
                 intent.putExtra("Resultado",0)
                 intent.putExtra("Jugador_ID",idUser)
                 startActivity(intent)
@@ -69,7 +70,7 @@ class Juego : AppCompatActivity() {
             }
 
             salir.setOnClickListener {
-                val intent = Intent(this,Menu::class.java)
+                val intent = Intent(this, MenuActivity::class.java)
                 intent.putExtra("Jugador_ID",idUser)
                 startActivity(intent)
             }
@@ -79,7 +80,7 @@ class Juego : AppCompatActivity() {
             MyDBOpenHelper.addGame(jugador.nombre.toString(),"Victoria")
             MyDBOpenHelper.updatePoints(jugador)
 
-            val intent = Intent(this,SolucionJuego::class.java)
+            val intent = Intent(this, SolucionJuego::class.java)
             intent.putExtra("Resultado",1)
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
@@ -87,7 +88,7 @@ class Juego : AppCompatActivity() {
 
         fun lose(){
             MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
-            val intent = Intent(this,SolucionJuego::class.java)
+            val intent = Intent(this, SolucionJuego::class.java)
             intent.putExtra("Jugador_ID",idUser)
             intent.putExtra("Resultado",0)
             startActivity(intent)
