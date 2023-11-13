@@ -79,7 +79,7 @@ class Juego : AppCompatActivity() {
         }
 
         fun determineWinner(eleccionMaquina: Int, eleccionJugador: Int) {
-            while (rondasJugadas <= rondasMaximas){
+            if (rondasJugadas < rondasMaximas){
                 if ((eleccionJugador == 0 && eleccionMaquina == 1) ||
                     (eleccionJugador == 1 && eleccionMaquina == 2) ||
                     (eleccionJugador == 2 && eleccionMaquina == 0)
@@ -87,25 +87,22 @@ class Juego : AppCompatActivity() {
                     // Si gana el jugador
                     EstadoTV.text = "VICTORIA"
                     puntj++
-                    rondasJugadas++
                     Log.d(TAG, "El jugador ha ganado")
                 } else if (eleccionJugador == eleccionMaquina){
                     // Si empata el jugador
                     EstadoTV.text = "EMPATE"
-                    rondasJugadas++
                     Log.d(TAG, "El juego ha quedado en empate")
                 } else {
                     // Si pierde el jugador
                     EstadoTV.text = "DERROTA"
                     puntm++
-                    rondasJugadas++
                     Log.d(TAG, "El jugador ha perdido")
                 }
 
                 updateCountRound()
                 updateCountPlayers()
+                rondasJugadas++
             }
-
         }
 
         PiedraBT.setOnClickListener {
