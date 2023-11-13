@@ -18,29 +18,30 @@ class Menu : AppCompatActivity() {
         val nombre = findViewById<TextView>(R.id.textNombre)
         val puntos = findViewById<TextView>(R.id.textPuntos)
 
-        val MyDBOpenHelper = MyDBOpenHelper(this,null)
-        val idUser = intent.getIntExtra("Jugador_ID",-1)
-        val jugador = MyDBOpenHelper.getUser(idUser)
+        val MyDBOpenHelper = MyDBOpenHelper(this, null)
+        var idUser = UserSingelton.id
+        var jugador = MyDBOpenHelper.getUser(idUser)
         nombre.text = jugador.nombre.toString()
         puntos.text = jugador.puntuacion.toString()
 
 
-        if(idUser == -1){ // LogOut de seguridad
-            val intent = Intent(this,MainActivity::class.java)
-            intent.putExtra("Jugador_ID",idUser)
+        if (idUser == -1) { // LogOut de seguridad
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+
         }
 
 
-        jugarBt.setOnClickListener{
-            val intent = Intent(this,Juego::class.java)
-            intent.putExtra("Jugador_ID",idUser)
+        jugarBt.setOnClickListener {
+            val intent = Intent(this, Juego::class.java)
             startActivity(intent)
+
         }
 
         historicoBt.setOnClickListener {
-            val intent = Intent(this,Historico::class.java)
+            val intent = Intent(this, Historico::class.java)
             startActivity(intent)
 
-        }}
+        }
+    }
 }

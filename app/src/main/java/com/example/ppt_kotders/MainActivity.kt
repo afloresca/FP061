@@ -42,9 +42,12 @@ class MainActivity : ComponentActivity() {
 
                 id = MyDBOpenHelper.getUserID(nombreplayer)
                 val intent = Intent(this, Menu::class.java)
-                intent.putExtra("Jugador_ID", id)
+                UserSingelton.id = id
+                //intent.putExtra("Jugador_ID", id)
                 startActivity(intent)
             }
+
+
 
         }
 

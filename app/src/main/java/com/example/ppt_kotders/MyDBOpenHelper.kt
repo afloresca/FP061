@@ -142,7 +142,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     fun updatePoints(jugadorModelo: JugadorModelo){
 
-        val newpoints = jugadorModelo.puntuacion // Los puntos del jugador han cambiado
+        val newpoints = jugadorModelo.puntuacion + 1 // Los puntos del jugador han cambiado
         val db=this.writableDatabase;
 
         val valores = ContentValues()
@@ -160,8 +160,39 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     }
 
+    /*fun obtenerDatosPartidas(): List<Pair<String, String>> {
 
+        val datosPartidas = mutableListOf<Pair<String, String>>()
+
+        try {
+            val db = this.readableDatabase
+            val query = "SELECT $COLUMN_RESULTADO, $COLUMN_FECHAHORA FROM $TABLE_PARTIDAS"
+            val cursor = db.rawQuery(query, null)
+
+            if (cursor.moveToFirst()) {
+                do {
+                    val resultado = cursor.getString(cursor.getColumnIndex(COLUMN_RESULTADO))
+                    val fechaHora = cursor.getString(cursor.getColumnIndex(COLUMN_FECHAHORA))
+
+                    val estadoFechaHora = Pair(resultado, fechaHora)
+                    datosPartidas.add(estadoFechaHora)
+                } while (cursor.moveToNext())
+            }
+
+            cursor.close()
+            db.close()
+
+        } catch (e: SQLiteException) {
+            Log.e(TAG, "Error al obtener datos de partidas: ${e.message}")
+        }
+
+        return datosPartidas
+    }*/
 }
+
+
+
+
 
 
 

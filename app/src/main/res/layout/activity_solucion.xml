@@ -20,9 +20,8 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="317dp"
-            android:backgroundTint="@color/white"
-            app:srcCompat="@drawable/historico_1_photoroom_png_photoroom" />
+            android:layout_height="355dp"
+            tools:src="@drawable/historico_1_photoroom_png_photoroom" />
 
         <TextView
             android:id="@+id/textView3"
@@ -55,7 +54,13 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:src="@tools:sample/avatars"
-            app:srcCompat="@drawable/continuar_1_" />
+            android:src="@drawable/continuar_1_" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

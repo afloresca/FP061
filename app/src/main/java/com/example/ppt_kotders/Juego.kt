@@ -45,12 +45,19 @@ class Juego : AppCompatActivity() {
             contadortv.text = idUser.toString()
 
             PiedraBT.setOnClickListener {
-                imgJugador.setImageResource(R.drawable.piedra)
-                imgMaquina.setImageResource(playMachine())
+
+
             }
             PapelBT.setOnClickListener {
-                imgJugador.setImageResource(R.drawable.papel)
-                imgMaquina.setImageResource(playMachine())
+
+                MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
+                val intent = Intent(this,SolucionJuego::class.java)
+                intent.putExtra("Resultado",0)
+                intent.putExtra("Jugador_ID",idUser)
+                startActivity(intent)
+
+                //imgJugador.setImageResource(R.drawable.papel)
+                //imgMaquina.setImageResource(playMachine())
             }
             TijerasBTT.setOnClickListener {
                 imgJugador.setImageResource(R.drawable.tijera)
@@ -69,7 +76,7 @@ class Juego : AppCompatActivity() {
             MyDBOpenHelper.updatePoints(jugador)
 
             val intent = Intent(this,SolucionJuego::class.java)
-            intent.putExtra("Resultado","v")
+            intent.putExtra("Resultado",1)
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }
@@ -77,8 +84,8 @@ class Juego : AppCompatActivity() {
         fun lose(){
             MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
             val intent = Intent(this,SolucionJuego::class.java)
-            intent.putExtra("Resultado","d")
             intent.putExtra("Jugador_ID",idUser)
+            intent.putExtra("Resultado",0)
             startActivity(intent)
         }
     }

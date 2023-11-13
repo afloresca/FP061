@@ -3,49 +3,57 @@ package com.example.ppt_kotders
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class SolucionJuego : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val idUser = intent.getIntExtra("Jugador_ID",-1)
-        val condicion = intent.getStringExtra("Resultado")
+           setContentView(R.layout.activity_solucion)
 
-        // Condicionantes de logout
-        if(condicion == null || idUser == -1){
+          val idUser = UserSingelton.id
+          val condicion = intent.getIntExtra("Resultado",-1)
+
+          val buttonD = findViewById<Button>(R.id.buttonD)
+          val imagen = findViewById<ImageView>(R.id.imageView)
+          val texto = findViewById<TextView>(R.id.textView3)
+          val textodata = findViewById<TextView>(R.id.textView)
+              textodata.text = idUser.toString()
+
             if(idUser == -1){
                 val intent = Intent(this,MainActivity::class.java)
                 startActivity(intent)
+            }
+
+            if(condicion == 1) { // Victoria
+
+                imagen.setImageResource(R.drawable.ppt)
+                texto.text = " VICTORIA "
+
             } else{
-                val intent = Intent(this,Menu::class.java)
-                intent.putExtra("Jugador_ID",idUser)
-                startActivity(intent)
+
+                imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
+                texto.text = " DERROTA "
             }
-        }
 
-        val buttonD = findViewById<Button>(R.id.buttonD)
-        val buttonV = findViewById<Button>(R.id.buttonV)
-
-        if(condicion == "v") {
-            setContentView(R.layout.activity_win)
-            buttonV.setOnClickListener(){
+            buttonD.setOnClickListener(){
 
                 val intent = Intent(this,Menu::class.java)
-                intent.putExtra("Jugador_ID",idUser)
+                intent.putExtra("Jugador_Id",idUser)
                 startActivity(intent)
-            }
-            // Declarar contenidos
-        }
-
-        if(condicion == "d"){
-            setContentView(R.layout.activity_lose)
-
-            val intent = Intent(this,Menu::class.java)
-            intent.putExtra("Jugador_ID",idUser)
-            startActivity(intent)
 
         }
+
+
+
+
+
+
+        val menuIntent = Intent(this,Menu::class.java)
+        menuIntent.putExtra("Jugador_ID",idUser)
+
 
     }
 }
