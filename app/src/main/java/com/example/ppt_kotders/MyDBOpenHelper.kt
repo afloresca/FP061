@@ -1,11 +1,11 @@
-package com.example.ppt_kotders.database
+
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.ppt_kotders.models.Jugador
+import com.example.ppt_kotders.JugadorModelo
 
 class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -39,7 +39,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
             // Crear la tabla Partidas
             val createTablePartidas = "CREATE TABLE $TABLE_PARTIDAS" +
                     "(${COLUMN_PARTIDA_ID}_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "$COLUMN_JUGADOR_NOMBRE VARCHAR (60)," +
+                    "${COLUMN_JUGADOR_NOMBRE} VARCHAR (60)," +
                     "$COLUMN_RESULTADO VARCHAR(10), " +
                     "$COLUMN_FECHAHORA DATETIME DEFAULT CURRENT_TIMESTAMP)"
 
@@ -104,8 +104,8 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     }
 
-    fun getUser(playerId:Int): Jugador {
-        var jugadorModelo : Jugador?=null
+    fun getUser(playerId:Int):JugadorModelo{
+        var jugadorModelo : JugadorModelo?=null
         val db = this.readableDatabase
         val columnas = arrayOf(COLUMN_ID, COLUMN_NOMBRE, COLUMN_PUNTOS)
         val condicion = "$COLUMN_ID = ?" // Puedes ajustar esta condición según tus necesidades
@@ -122,7 +122,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
                 val id = cursor.getInt(columnIndex)
                 val nombre = cursor.getString(nameIndex)
                 val puntos = cursor.getInt(puntosIndex)
-                jugadorModelo = Jugador(id,nombre,puntos)
+                jugadorModelo = JugadorModelo(id,nombre,puntos)
 
                 cursor.close()
                 db.close()
@@ -135,12 +135,12 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
         cursor.close()
         db.close()
 
-        jugadorModelo = Jugador(0,"",0);
+        jugadorModelo = JugadorModelo(0,"",0);
 
         return jugadorModelo;
     }
 
-    fun updatePoints(jugadorModelo: Jugador){
+    fun updatePoints(jugadorModelo: JugadorModelo){
 
         val newpoints = jugadorModelo.puntuacion + 1 // Los puntos del jugador han cambiado
         val db=this.writableDatabase;

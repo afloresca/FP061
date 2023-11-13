@@ -1,6 +1,6 @@
-package com.example.ppt_kotders.models
+package com.example.ppt_kotders
 
-class Jugador {
+class JugadorModelo {
 
      var id : Int
      var nombre : String

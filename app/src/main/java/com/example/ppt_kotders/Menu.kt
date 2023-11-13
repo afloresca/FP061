@@ -1,21 +1,19 @@
-package com.example.ppt_kotders.activities
+package com.example.ppt_kotders
 
-import com.example.ppt_kotders.database.MyDBOpenHelper
+import MyDBOpenHelper
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ppt_kotders.R
-import com.example.ppt_kotders.UserSingelton
 
-class MenuActivity : AppCompatActivity() {
+class Menu : AppCompatActivity() {
 
-    val TAG = "Menu"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_menu) // layout menu
+        setContentView(R.layout.menu) // layout menu
 
         val jugarBt = findViewById<Button>(R.id.btjugar)
         val historicoBt = findViewById<Button>(R.id.bthistorico)
@@ -44,7 +42,7 @@ class MenuActivity : AppCompatActivity() {
         }
 
         historicoBt.setOnClickListener {
-            val intent = Intent(this, HistoricoActivity::class.java)
+            val intent = Intent(this, Historico::class.java)
             startActivity(intent)
 
         }

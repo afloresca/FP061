@@ -1,10 +1,9 @@
-package com.example.ppt_kotders.activities
+package com.example.ppt_kotders
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ppt_kotders.R
 
-class HistoricoActivity : AppCompatActivity() {
+class Historico : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historico)
