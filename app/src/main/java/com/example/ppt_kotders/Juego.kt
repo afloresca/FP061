@@ -8,113 +8,115 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 
 class Juego : AppCompatActivity() {
-
+    val TAG = "Juego"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.juego)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.juego)
 
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
         val idUser = intent.getIntExtra("Jugador_ID",-1)
+
         if(idUser == -1){ // LogOut de seguridad
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
             finish() // Asegúrate de finalizar la actividad actual después de iniciar la nueva
             return
         }
+
         val jugador = MyDBOpenHelper.getUser(idUser)
 
 
-            // Bottones jugador
-            val PiedraBT = findViewById<ImageButton>(R.id.btpiedra)
-            val PapelBT = findViewById<ImageButton>(R.id.btpapel)
-            val TijerasBTT = findViewById<ImageButton>(R.id.bttijeras)
-            val salir = findViewById<Button>(R.id.btSalir)
+        // Bottones jugador
+        val PiedraBT = findViewById<ImageButton>(R.id.btpiedra)
+        val PapelBT = findViewById<ImageButton>(R.id.btpapel)
+        val TijerasBTT = findViewById<ImageButton>(R.id.bttijeras)
+        val salir = findViewById<Button>(R.id.btSalir)
 
-            val contadortv = findViewById<TextView>(R.id.contadortv)
-            val EstadoTV = findViewById<TextView>(R.id.estadotv) // Victoria o Derrota punto
-            val ContJtv = findViewById<TextView>(R.id.txtu) // Contador Puntos jugador
-            val ContMtv = findViewById<TextView>(R.id.txmaquina) // Contador Puntos maquina
+        val contadortv = findViewById<TextView>(R.id.contadortv)
+        val EstadoTV = findViewById<TextView>(R.id.estadotv) // Victoria o Derrota punto
+        val ContJtv = findViewById<TextView>(R.id.txtu) // Contador Puntos jugador
+        val ContMtv = findViewById<TextView>(R.id.txmaquina) // Contador Puntos maquina
 
-            var imgJugador = findViewById<ImageView>(R.id.imgjugador) // Continene las lecciones
-            var imgMaquina = findViewById<ImageView>(R.id.imgmaquina)
+        var imgJugador = findViewById<ImageView>(R.id.imgjugador) // Continene las lecciones
+        var imgMaquina = findViewById<ImageView>(R.id.imgmaquina)
 
-            var puntj = 0 // Establecemos los puntuajes a 0
-            var puntm = 0
-            var rondasJugadas = 0
+        var puntj = 0 // Establecemos los puntuajes a 0
+        var puntm = 0
+        var rondasJugadas = 0
+        var rondasMaximas = 3
 
-            var gana = Resultado.VICTORIA
-            var pierde = Resultado.DERROTA
-            var empate = Resultado.EMPATE
+        contadortv.text = idUser.toString()
 
-            contadortv.text = idUser.toString()
+        salir.setOnClickListener {
+            val intent = Intent(this,Menu::class.java)
+            intent.putExtra("Jugador_ID",idUser)
+            startActivity(intent)
+        }
 
-            salir.setOnClickListener {
-                val intent = Intent(this,Menu::class.java)
-                intent.putExtra("Jugador_ID",idUser)
-                startActivity(intent)
-            }
+        fun updateCountRound(){
+            contadortv.text = rondasJugadas.toString()
+        }
 
-        fun getImageResource(opcion: Gesto): Int {
-            return when (opcion){
-                Gesto.PIEDRA -> R.drawable.piedra
-                Gesto.PAPEL -> R.drawable.papel
-                Gesto.TIJERA -> R.drawable.tijera
+        fun updateCountPlayers(){
+            
+        }
+
+        fun playMachine(): Int{
+            return (0..2).random()
+        }
+
+        fun getDrawableResource(result: Int) : Int {
+            return when (result) {
+                0 -> R.drawable.papel
+                1 -> R.drawable.piedra
+                2 -> R.drawable.tijera
+                else -> R.drawable.incognito
             }
         }
 
-        fun compareOptions(opcionJugador: Gesto, opcionMaquina: Gesto): Resultado {
-            return when {
-                opcionJugador == opcionMaquina -> Resultado.EMPATE
-                (opcionJugador == Gesto.PIEDRA && opcionMaquina == Gesto.TIJERA) ||
-                        (opcionJugador == Gesto.PAPEL && opcionMaquina == Gesto.PIEDRA) ||
-                        (opcionJugador == Gesto.TIJERA && opcionMaquina == Gesto.PAPEL) -> Resultado.VICTORIA
-                else -> Resultado.DERROTA
+        fun determineWinner(eleccionMaquina: Int, eleccionJugador: Int) {
+            if ((eleccionJugador == 0 && eleccionMaquina == 1) ||
+                (eleccionJugador == 1 && eleccionMaquina == 2) ||
+                (eleccionJugador == 2 && eleccionMaquina == 0)
+            ) {
+                TODO() // Si gana el jugador
+            } else if (eleccionJugador == eleccionMaquina){
+                TODO() // Si empata el jugador
+            } else {
+                TODO() // Si pierde el jugador
             }
         }
 
-        fun playRound(opcionJugador: Gesto) {
-            val opcionMaquina = playMachine()
-
-            imgJugador.setImageResource(getImageResource(opcionJugador))
-            imgMaquina.setImageResource(getImageResource(opcionMaquina))
-
-            val resultado = compareOptions(opcionJugador, opcionMaquina)
-
-            when (resultado) {
-                Resultado.EMPATE -> {
-                    // No hace nada
-                }
-                Resultado.VICTORIA -> {
-                    puntj++
-                }
-                Resultado.DERROTA -> {
-                    puntm++
-                }
-            }
-            rondasJugadas++
+        PiedraBT.setOnClickListener {
+            val result = playMachine()
+            imgJugador.setImageResource(R.drawable.piedra)
+            imgMaquina.setImageResource(getDrawableResource(result))
+            determineWinner(result,0)
+            updateCountRound()
+        }
+        PapelBT.setOnClickListener {
+            val result = playMachine()
+            imgJugador.setImageResource(R.drawable.papel)
+            imgMaquina.setImageResource(getDrawableResource(result))
+            determineWinner(result,1)
+        }
+        TijerasBTT.setOnClickListener {
+            val result = playMachine()
+            imgJugador.setImageResource(R.drawable.tijera)
+            imgMaquina.setImageResource(getDrawableResource(result))
+            determineWinner(result,2)
         }
 
-
-        fun startGame() {
-            PiedraBT.setOnClickListener {
-                playRound(Gesto.PIEDRA)
-            }
-
-            PapelBT.setOnClickListener {
-                playRound(Gesto.PAPEL)
-            }
-
-            TijerasBTT.setOnClickListener {
-                playRound(Gesto.TIJERA)
-            }
+        salir.setOnClickListener {
+            val intent = Intent(this,Menu::class.java)
+            intent.putExtra("Jugador_ID",idUser)
+            startActivity(intent)
         }
-
-        startGame()
-
 
         fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
             // Registra partida
@@ -134,16 +136,6 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Resultado",0)
             startActivity(intent)
         }
-    }
 
 }
-
-fun playMachine() : Gesto {
-    val result = (1..3).random()
-    return when (result) {
-        1 -> Gesto.PAPEL
-        2 -> Gesto.PIEDRA
-        3 -> Gesto.TIJERA
-        else -> throw IllegalStateException("Valor inesperado en playMachine()")
-    }
 }

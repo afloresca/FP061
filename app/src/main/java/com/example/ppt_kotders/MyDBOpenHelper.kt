@@ -45,7 +45,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
             db.execSQL(createTablePartidas)
         } catch (e: SQLiteException) {
-            Log.e("$TAG (onCreate)", e.message.toString())
+            Log.d("$TAG (onCreate)", e.message.toString())
         }
     }
 
