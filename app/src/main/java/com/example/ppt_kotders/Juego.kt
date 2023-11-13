@@ -44,35 +44,75 @@ class Juego : AppCompatActivity() {
 
             var puntj = 0 // Establecemos los puntuajes a 0
             var puntm = 0
-            var result = 0
+            var rondasJugadas = 0
+
+            var gana = Resultado.VICTORIA
+            var pierde = Resultado.DERROTA
+            var empate = Resultado.EMPATE
 
             contadortv.text = idUser.toString()
-
-            PiedraBT.setOnClickListener {
-
-
-            }
-            PapelBT.setOnClickListener {
-
-                MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
-                val intent = Intent(this,SolucionJuego::class.java)
-                intent.putExtra("Resultado",0)
-                intent.putExtra("Jugador_ID",idUser)
-                startActivity(intent)
-
-                //imgJugador.setImageResource(R.drawable.papel)
-                //imgMaquina.setImageResource(playMachine())
-            }
-            TijerasBTT.setOnClickListener {
-                imgJugador.setImageResource(R.drawable.tijera)
-                imgMaquina.setImageResource(playMachine())
-            }
 
             salir.setOnClickListener {
                 val intent = Intent(this,Menu::class.java)
                 intent.putExtra("Jugador_ID",idUser)
                 startActivity(intent)
             }
+
+        fun startGame() {
+            PiedraBT.setOnClickListener {
+                playRound(Gesto.PIEDRA)
+            }
+
+            PapelBT.setOnClickListener {
+                playRound(Gesto.PAPEL)
+            }
+
+            TijerasBTT.setOnClickListener {
+                playRound(Gesto.TIJERA)
+            }
+        }
+
+        fun playRound(opcionJugador: Gesto) {
+            val opcionMaquina = playMachine()
+
+            imgJugador.setImageResource(getImageResource(opcionJugador))
+            imgMaquina.setImageResource(getImageResource(opcionMaquina))
+
+            val resultado = compareOptions(opcionJugador, opcionMaquina)
+
+            when (resultado) {
+                Resultado.EMPATE -> {
+                    // Manejar empate
+                }
+                Resultado.VICTORIA -> {
+                    puntj++
+                }
+                Resultado.DERROTA -> {
+                    puntm++
+                }
+            }
+            rondasJugadas++
+        }
+
+
+
+        fun getImageResource(opcion: Gesto): Int {
+            return when (opcion){
+                Gesto.PIEDRA -> R.drawable.piedra
+                Gesto.PAPEL -> R.drawable.papel
+                Gesto.TIJERA -> R.drawable.tijera
+            }
+        }
+
+        fun compareOptions(opcionJugador: Gesto, opcionMaquina: Gesto): Resultado {
+            return when {
+                opcionJugador == opcionMaquina -> Resultado.EMPATE
+                (opcionJugador == Gesto.PIEDRA && opcionMaquina == Gesto.TIJERA) ||
+                        (opcionJugador == Gesto.PAPEL && opcionMaquina == Gesto.PIEDRA) ||
+                        (opcionJugador == Gesto.TIJERA && opcionMaquina == Gesto.PAPEL) -> Resultado.GANA_JUGADOR
+                else -> Resultado.DERROTA
+            }
+        }
 
         fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
             // Registra partida
