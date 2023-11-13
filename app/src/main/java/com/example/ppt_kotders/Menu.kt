@@ -27,7 +27,9 @@ class Menu : AppCompatActivity() {
 
         if (idUser == -1) { // LogOut de seguridad
             val intent = Intent(this, MainActivity::class.java)
+            UserSingelton.id = 0
             startActivity(intent)
+            finish()
 
         }
 
@@ -35,12 +37,14 @@ class Menu : AppCompatActivity() {
         jugarBt.setOnClickListener {
             val intent = Intent(this, Juego::class.java)
             startActivity(intent)
+            finish()
 
         }
 
         historicoBt.setOnClickListener {
             val intent = Intent(this, Historico::class.java)
             startActivity(intent)
+            finish()
 
         }
     }

@@ -52,8 +52,6 @@ class Juego : AppCompatActivity() {
 
                 MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
                 val intent = Intent(this,SolucionJuego::class.java)
-                intent.putExtra("Resultado",0)
-                intent.putExtra("Jugador_ID",idUser)
                 startActivity(intent)
 
                 //imgJugador.setImageResource(R.drawable.papel)
@@ -76,8 +74,7 @@ class Juego : AppCompatActivity() {
             MyDBOpenHelper.updatePoints(jugador)
 
             val intent = Intent(this,SolucionJuego::class.java)
-            intent.putExtra("Resultado",1)
-            intent.putExtra("Jugador_ID",idUser)
+
             startActivity(intent)
         }
 
