@@ -16,8 +16,8 @@
             android:id="@+id/logouoc"
             android:layout_width="150dp"
             android:layout_height="65dp"
-            android:layout_marginLeft="20dp"
             android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
             android:src="@drawable/image_photoroom_png_photoroom" />
 
         <TextView

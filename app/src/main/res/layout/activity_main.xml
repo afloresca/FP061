@@ -22,7 +22,7 @@
             android:layout_height="107dp"
             android:ems="10"
             android:fontFamily="sans-serif"
-            android:hint="usuario"
+            android:hint="Usuario"
             android:inputType="text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="34sp" />

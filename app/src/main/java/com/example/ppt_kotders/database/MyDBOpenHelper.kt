@@ -1,11 +1,11 @@
-
+package com.example.ppt_kotders.database
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.ppt_kotders.JugadorModelo
+import com.example.ppt_kotders.models.JugadorModelo
 
 class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -39,7 +39,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
             // Crear la tabla Partidas
             val createTablePartidas = "CREATE TABLE $TABLE_PARTIDAS" +
                     "(${COLUMN_PARTIDA_ID}_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "${COLUMN_JUGADOR_NOMBRE} VARCHAR (60)," +
+                    "$COLUMN_JUGADOR_NOMBRE VARCHAR (60)," +
                     "$COLUMN_RESULTADO VARCHAR(10), " +
                     "$COLUMN_FECHAHORA DATETIME DEFAULT CURRENT_TIMESTAMP)"
 
@@ -104,7 +104,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     }
 
-    fun getUser(playerId:Int):JugadorModelo{
+    fun getUser(playerId:Int): JugadorModelo {
         var jugadorModelo : JugadorModelo?=null
         val db = this.readableDatabase
         val columnas = arrayOf(COLUMN_ID, COLUMN_NOMBRE, COLUMN_PUNTOS)
@@ -142,7 +142,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     fun updatePoints(jugadorModelo: JugadorModelo){
 
-        val newpoints = jugadorModelo.puntuacion // Los puntos del jugador han cambiado
+        val newpoints = jugadorModelo.puntuacion + 1 // Los puntos del jugador han cambiado
         val db=this.writableDatabase;
 
         val valores = ContentValues()
@@ -160,8 +160,39 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     }
 
+    /*fun obtenerDatosPartidas(): List<Pair<String, String>> {
 
+        val datosPartidas = mutableListOf<Pair<String, String>>()
+
+        try {
+            val db = this.readableDatabase
+            val query = "SELECT $COLUMN_RESULTADO, $COLUMN_FECHAHORA FROM $TABLE_PARTIDAS"
+            val cursor = db.rawQuery(query, null)
+
+            if (cursor.moveToFirst()) {
+                do {
+                    val resultado = cursor.getString(cursor.getColumnIndex(COLUMN_RESULTADO))
+                    val fechaHora = cursor.getString(cursor.getColumnIndex(COLUMN_FECHAHORA))
+
+                    val estadoFechaHora = Pair(resultado, fechaHora)
+                    datosPartidas.add(estadoFechaHora)
+                } while (cursor.moveToNext())
+            }
+
+            cursor.close()
+            db.close()
+
+        } catch (e: SQLiteException) {
+            Log.e(TAG, "Error al obtener datos de partidas: ${e.message}")
+        }
+
+        return datosPartidas
+    }*/
 }
+
+
+
+
 
 
 
