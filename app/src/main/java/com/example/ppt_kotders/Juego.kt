@@ -58,6 +58,47 @@ class Juego : AppCompatActivity() {
                 startActivity(intent)
             }
 
+        fun getImageResource(opcion: Gesto): Int {
+            return when (opcion){
+                Gesto.PIEDRA -> R.drawable.piedra
+                Gesto.PAPEL -> R.drawable.papel
+                Gesto.TIJERA -> R.drawable.tijera
+            }
+        }
+
+        fun compareOptions(opcionJugador: Gesto, opcionMaquina: Gesto): Resultado {
+            return when {
+                opcionJugador == opcionMaquina -> Resultado.EMPATE
+                (opcionJugador == Gesto.PIEDRA && opcionMaquina == Gesto.TIJERA) ||
+                        (opcionJugador == Gesto.PAPEL && opcionMaquina == Gesto.PIEDRA) ||
+                        (opcionJugador == Gesto.TIJERA && opcionMaquina == Gesto.PAPEL) -> Resultado.VICTORIA
+                else -> Resultado.DERROTA
+            }
+        }
+
+        fun playRound(opcionJugador: Gesto) {
+            val opcionMaquina = playMachine()
+
+            imgJugador.setImageResource(getImageResource(opcionJugador))
+            imgMaquina.setImageResource(getImageResource(opcionMaquina))
+
+            val resultado = compareOptions(opcionJugador, opcionMaquina)
+
+            when (resultado) {
+                Resultado.EMPATE -> {
+                    // No hace nada
+                }
+                Resultado.VICTORIA -> {
+                    puntj++
+                }
+                Resultado.DERROTA -> {
+                    puntm++
+                }
+            }
+            rondasJugadas++
+        }
+
+
         fun startGame() {
             PiedraBT.setOnClickListener {
                 playRound(Gesto.PIEDRA)
@@ -72,47 +113,8 @@ class Juego : AppCompatActivity() {
             }
         }
 
-        fun playRound(opcionJugador: Gesto) {
-            val opcionMaquina = playMachine()
+        startGame()
 
-            imgJugador.setImageResource(getImageResource(opcionJugador))
-            imgMaquina.setImageResource(getImageResource(opcionMaquina))
-
-            val resultado = compareOptions(opcionJugador, opcionMaquina)
-
-            when (resultado) {
-                Resultado.EMPATE -> {
-                    // Manejar empate
-                }
-                Resultado.VICTORIA -> {
-                    puntj++
-                }
-                Resultado.DERROTA -> {
-                    puntm++
-                }
-            }
-            rondasJugadas++
-        }
-
-
-
-        fun getImageResource(opcion: Gesto): Int {
-            return when (opcion){
-                Gesto.PIEDRA -> R.drawable.piedra
-                Gesto.PAPEL -> R.drawable.papel
-                Gesto.TIJERA -> R.drawable.tijera
-            }
-        }
-
-        fun compareOptions(opcionJugador: Gesto, opcionMaquina: Gesto): Resultado {
-            return when {
-                opcionJugador == opcionMaquina -> Resultado.EMPATE
-                (opcionJugador == Gesto.PIEDRA && opcionMaquina == Gesto.TIJERA) ||
-                        (opcionJugador == Gesto.PAPEL && opcionMaquina == Gesto.PIEDRA) ||
-                        (opcionJugador == Gesto.TIJERA && opcionMaquina == Gesto.PAPEL) -> Resultado.GANA_JUGADOR
-                else -> Resultado.DERROTA
-            }
-        }
 
         fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
             // Registra partida
@@ -136,12 +138,12 @@ class Juego : AppCompatActivity() {
 
 }
 
-fun playMachine() : Int {
+fun playMachine() : Gesto {
     val result = (1..3).random()
     return when (result) {
-        1 -> R.drawable.papel
-        2 -> R.drawable.piedra
-        3 -> R.drawable.tijera
-        else -> R.drawable.incognito
+        1 -> Gesto.PAPEL
+        2 -> Gesto.PIEDRA
+        3 -> Gesto.TIJERA
+        else -> throw IllegalStateException("Valor inesperado en playMachine()")
     }
 }
