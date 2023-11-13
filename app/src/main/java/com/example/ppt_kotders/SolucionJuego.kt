@@ -11,49 +11,53 @@ class SolucionJuego : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-           setContentView(R.layout.activity_solucion)
+        setContentView(R.layout.activity_solucion)
 
-          val idUser = UserSingelton.id
-          val condicion = intent.getIntExtra("Resultado",-1)
+        val idUser = UserSingelton.id
+        val condicion = UserSingelton.estado
+        val buttonD = findViewById<Button>(R.id.buttonD)
+        val imagen = findViewById<ImageView>(R.id.imageView)
+        val texto = findViewById<TextView>(R.id.textView3)
+        val textodata = findViewById<TextView>(R.id.textView)
+        textodata.text = idUser.toString()
 
-          val buttonD = findViewById<Button>(R.id.buttonD)
-          val imagen = findViewById<ImageView>(R.id.imageView)
-          val texto = findViewById<TextView>(R.id.textView3)
-          val textodata = findViewById<TextView>(R.id.textView)
-              textodata.text = idUser.toString()
+        if (idUser == -1) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
-            if(idUser == -1){
-                val intent = Intent(this,MainActivity::class.java)
-                startActivity(intent)
-            }
+        when (condicion) {
 
-            if(condicion == 1) { // Victoria
-
+            1 -> {
                 imagen.setImageResource(R.drawable.ppt)
                 texto.text = " VICTORIA "
+            }
 
-            } else{
-
+            2 -> {
                 imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
                 texto.text = " DERROTA "
             }
 
-            buttonD.setOnClickListener(){
-
-                val intent = Intent(this,Menu::class.java)
-                intent.putExtra("Jugador_Id",idUser)
-                startActivity(intent)
-
+            0 -> logout() // Por defecto -> error del juego
         }
 
+        buttonD.setOnClickListener() {
 
+            val intent = Intent(this, Menu::class.java)
+            UserSingelton.estado = 0 // Lo ponemos po defecto
+            startActivity(intent)
+            finish()
 
+        }
+    }
 
-
-
-        val menuIntent = Intent(this,Menu::class.java)
-        menuIntent.putExtra("Jugador_ID",idUser)
-
+    fun logout(){ // Detecta el estado default y rectifica el error logout
+        val intent = Intent(this,MainActivity::class.java)
+        UserSingelton.id = 0
+        UserSingelton.estado = 0
+        startActivity(intent)
+        finish()
 
     }
+
 }

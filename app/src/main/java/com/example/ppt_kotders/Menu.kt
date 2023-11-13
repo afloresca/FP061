@@ -29,21 +29,23 @@ class Menu : AppCompatActivity() {
 
         if (idUser == -1) { // LogOut de seguridad
             val intent = Intent(this, MainActivity::class.java)
+            UserSingelton.id = 0
             startActivity(intent)
-
+            finish()
         }
 
 
         jugarBt.setOnClickListener {
             val intent = Intent(this, Juego::class.java)
-           // intent.putExtra("Jugador_ID", idUser) // Adjuntar el ID del jugador al Intent
             startActivity(intent)
+            finish()
 
         }
 
         historicoBt.setOnClickListener {
             val intent = Intent(this, Historico::class.java)
             startActivity(intent)
+            finish()
 
         }
     }
