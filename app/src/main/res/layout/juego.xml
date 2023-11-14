@@ -13,7 +13,7 @@
         android:layout_gravity="right"
         android:layout_margin="10dp"
         android:backgroundTint="#FFC107"
-        android:fontFamily="@font/"
+        android:fontFamily="@font/annie_use_your_telescope"
         android:text="SALIR"
         android:textColor="@color/black"
         android:textSize="24sp"
@@ -43,6 +43,7 @@
             android:layout_marginRight="50dp"
             android:fontFamily="@font/annie_use_your_telescope"
             android:text="00"
+            android:textColor="@color/purple_500"
             android:textSize="48sp"
             android:textStyle="bold" />
 
@@ -96,7 +97,7 @@
             android:fontFamily="@font/annie_use_your_telescope"
             android:text="MAQUINA"
             android:textColor="@color/teal_200"
-            android:textSize="40sp"
+            android:textSize="34sp"
             android:textStyle="bold" />
 
         <TextView
@@ -108,7 +109,7 @@
             android:fontFamily="@font/annie_use_your_telescope"
             android:text="JUGADOR"
             android:textColor="@android:color/holo_orange_dark"
-            android:textSize="40sp"
+            android:textSize="34sp"
             android:textStyle="bold" />
     </LinearLayout>
     <LinearLayout
@@ -125,6 +126,7 @@
             android:fontFamily="@font/annie_use_your_telescope"
             android:text="0"
             android:textAlignment="center"
+            android:textColor="@color/design_default_color_error"
             android:textSize="50sp"
             android:textStyle="bold" />
 
@@ -137,11 +139,11 @@
             android:fontFamily="@font/annie_use_your_telescope"
             android:text="0"
             android:textAlignment="center"
+            android:textColor="@color/design_default_color_error"
             android:textSize="50sp"
             android:textStyle="bold" />
 
     </LinearLayout>
-
 
 
     <TextView
@@ -152,6 +154,7 @@
         android:layout_marginRight="10dp"
         android:fontFamily="@font/annie_use_your_telescope"
         android:text="ELIGE QUE QUIERES:"
+        android:textColor="@color/purple_500"
         android:textSize="34sp"
         android:textStyle="bold" />
 
@@ -169,25 +172,29 @@
                 android:id="@+id/btpapel"
                 android:layout_width="130dp"
                 android:layout_height="150dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/papel"
                 android:layout_marginLeft="10dp"
-                android:contentDescription="Botón de Papel" />
+                android:backgroundTint="@color/white"
+                android:contentDescription="Botón de Papel"
+                android:scaleType="fitXY"
+                android:src="@drawable/papel" />
 
             <ImageButton
                 android:id="@+id/btpiedra"
                 android:layout_width="130dp"
                 android:layout_height="150dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Botón de Piedra"
                 android:scaleType="fitXY"
-                android:src="@drawable/piedra"
-                android:contentDescription="Botón de Piedra" />
+                android:src="@drawable/piedra" />
+
             <ImageButton
                 android:id="@+id/bttijeras"
                 android:layout_width="130dp"
                 android:layout_height="150dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Botón de Tijeras "
                 android:scaleType="fitXY"
-                android:src="@drawable/tijera2"
-                android:contentDescription="Botón de Tijeras " />
+                android:src="@drawable/tijera2" />
 
         </LinearLayout>
 
