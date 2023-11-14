@@ -13,7 +13,6 @@ class Historico : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historico)
-        crearpartidas()
         initREcycleView()
 
         val btSalir = findViewById<Button>(R.id.btSalir)
