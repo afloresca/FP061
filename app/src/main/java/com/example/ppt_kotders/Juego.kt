@@ -47,7 +47,7 @@ class Juego : AppCompatActivity() {
         var puntj = 0 // Establecemos los puntuajes a 0
         var puntm = 0
         var rondasJugadas = 1
-        var rondasMaximas = 10
+        var rondasMaximas = 20
 
         //contadortv.text = idUser.toString()
 
