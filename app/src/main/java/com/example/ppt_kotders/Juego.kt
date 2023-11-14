@@ -53,7 +53,7 @@ class Juego : AppCompatActivity() {
 
         fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
             // Registra partida
-            MyDBOpenHelper.addGame(jugador.nombre.toString(),"Victoria")
+            MyDBOpenHelper.addGame(jugador.nombre,"Victoria")
             MyDBOpenHelper.updatePoints(jugador)
 
             val intent = Intent(this,SolucionJuego::class.java)
@@ -63,7 +63,7 @@ class Juego : AppCompatActivity() {
         }
 
         fun lose(){
-            MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
+            MyDBOpenHelper.addGame(jugador.nombre,"Derrota")
             val intent = Intent(this,SolucionJuego::class.java)
             intent.putExtra("Jugador_ID",idUser)
             intent.putExtra("Resultado",0)
@@ -73,8 +73,14 @@ class Juego : AppCompatActivity() {
         fun determineWinner(){
             if (puntj == 3 || puntm == 3) {
                 when {
-                    puntj == 3 -> win()
-                    puntm == 3 -> lose()
+                    puntj == 3 -> {
+                        UserSingelton.estado = 1
+                        win()
+                    }
+                    puntm == 3 -> {
+                        UserSingelton.estado = 2
+                        lose()
+                    }
                 }
             }
         }
