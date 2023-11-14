@@ -1,12 +1,14 @@
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Observable
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.ppt_kotders.JuegoModelo
 import com.example.ppt_kotders.JugadorModelo
+import io.reactivex.schedulers.Schedulers
 
 class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -59,6 +61,11 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
         Log.d("${ContentValues.TAG} (onOpen)", "¡¡Base de datos abierta!!")
     }
 
+    fun addPlayerRx(nombre: String, puntos: Int): Observable<Unit> {
+        return Observable.fromCallable {
+            addPlayer(nombre, puntos)
+        }.subscribeOn(Schedulers.io())
+    }
     fun addPlayer(nombre: String, puntos: Int) {
         // Se crea un ArrayMap<>() haciendo uso de ContentValues()
         val data = ContentValues()
