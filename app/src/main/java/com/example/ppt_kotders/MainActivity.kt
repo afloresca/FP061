@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         val inserttxt = findViewById<EditText>(R.id.editTextText2)
         val textview =findViewById<TextView>(R.id.textView8)
 
-        val MyDBOpenHelper = MyDBOpenHelper(this,null)
+        val myDBOpenHelper = MyDBOpenHelper(this,null)
 
         // Se introduce el texto
 
@@ -33,17 +33,16 @@ class MainActivity : ComponentActivity() {
             if(nombreplayer==""){
                 textview.text = " Introduce un nombre"
             } else {
-                var id = MyDBOpenHelper.getUserID(nombreplayer)
+                var id = myDBOpenHelper.getUserID(nombreplayer)
 
                 if (id == 0) { // Si existe el 1er jug guarda el id y accede automatico
-                    MyDBOpenHelper.addPlayer(nombreplayer, 0)
+                    myDBOpenHelper.addPlayer(nombreplayer, 0)
                     // Establecer filtro login
                 }
 
-                id = MyDBOpenHelper.getUserID(nombreplayer)
+                id = myDBOpenHelper.getUserID(nombreplayer)
                 val intent = Intent(this, Menu::class.java)
                 UserSingelton.id = id
-                //intent.putExtra("Jugador_ID", id)
                 startActivity(intent)
             }
 

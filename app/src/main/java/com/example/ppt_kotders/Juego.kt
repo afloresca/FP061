@@ -47,89 +47,9 @@ class Juego : AppCompatActivity() {
         var puntj = 0 // Establecemos los puntuajes a 0
         var puntm = 0
         var rondasJugadas = 1
-        var rondasMaximas = 3
+        var rondasMaximas = 10
 
         //contadortv.text = idUser.toString()
-
-        fun updateCountRound(){
-            contadortv.text = rondasJugadas.toString()
-            Log.d("$TAG", "Se ha actualizado el contador de rondas")
-        }
-
-        fun updateCountPlayers(){
-            ContJtv.text = puntj.toString()
-            Log.d("$TAG", "Se ha actualizado el contador de victorias del jugador")
-            ContMtv.text = puntm.toString()
-            Log.d("$TAG", "Se ha actualizado el contador de victorias de la máquina")
-        }
-
-        fun playMachine(): Int{
-            return (0..2).random()
-        }
-
-        fun getDrawableResource(result: Int) : Int {
-            Log.d("$TAG", "Se ha actualizado la elección del gesto")
-            return when (result) {
-                0 -> R.drawable.piedra
-                1 -> R.drawable.papel
-                2 -> R.drawable.tijera
-                else -> R.drawable.incognito
-            }
-        }
-
-        fun determineWinner(eleccionMaquina: Int, eleccionJugador: Int) {
-            if (rondasJugadas <= rondasMaximas && (puntm < 3 && puntj < 3)){
-                if ((eleccionJugador == 0 && eleccionMaquina == 2) ||
-                    (eleccionJugador == 1 && eleccionMaquina == 0) ||
-                    (eleccionJugador == 2 && eleccionMaquina == 1)
-                ) {
-                    // Si gana el jugador
-                    EstadoTV.text = "VICTORIA"
-                    puntj++
-                    Log.d(TAG, "El jugador ha ganado")
-                } else if ((eleccionJugador == 0 && eleccionMaquina == 0) ||
-                        (eleccionJugador == 1 && eleccionMaquina == 1) ||
-                        (eleccionJugador == 2 && eleccionMaquina == 2)){
-                    // Si empata el jugador
-                    EstadoTV.text = "EMPATE"
-                    Log.d(TAG, "El juego ha quedado en empate")
-                } else {
-                    // Si pierde el jugador
-                    EstadoTV.text = "DERROTA"
-                    puntm++
-                    Log.d(TAG, "El jugador ha perdido")
-                }
-
-                updateCountRound()
-                updateCountPlayers()
-                rondasJugadas++
-            }
-        }
-
-        PiedraBT.setOnClickListener {
-            val result = playMachine()
-            imgJugador.setImageResource(R.drawable.piedra)
-            imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinner(result,0)
-        }
-        PapelBT.setOnClickListener {
-            val result = playMachine()
-            imgJugador.setImageResource(R.drawable.papel)
-            imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinner(result,1)
-        }
-        TijerasBTT.setOnClickListener {
-            val result = playMachine()
-            imgJugador.setImageResource(R.drawable.tijera)
-            imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinner(result,2)
-        }
-
-        salir.setOnClickListener {
-            val intent = Intent(this,Menu::class.java)
-            intent.putExtra("Jugador_ID",idUser)
-            startActivity(intent)
-        }
 
         fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
             // Registra partida
@@ -149,6 +69,98 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Resultado",0)
             startActivity(intent)
         }
-}
+
+        fun determineWinner(){
+            if (puntj == 3 || puntm == 3) {
+                when {
+                    puntj == 3 -> win()
+                    puntm == 3 -> lose()
+                }
+            }
+        }
+
+        fun updateCountRound(){
+            contadortv.text = rondasJugadas.toString()
+            Log.d("$TAG", "Se ha actualizado el contador de rondas")
+        }
+
+        fun updateCountPlayers(){
+            ContJtv.text = puntj.toString()
+            Log.d("$TAG", "Se ha actualizado el contador de victorias del jugador")
+            ContMtv.text = puntm.toString()
+            Log.d("$TAG", "Se ha actualizado el contador de victorias de la máquina")
+
+
+        }
+
+        fun playMachine(): Int{
+            return (0..2).random()
+        }
+
+        fun getDrawableResource(result: Int) : Int {
+            Log.d("$TAG", "Se ha actualizado la elección del gesto")
+            return when (result) {
+                0 -> R.drawable.piedra
+                1 -> R.drawable.papel
+                2 -> R.drawable.tijera
+                else -> R.drawable.incognito
+            }
+        }
+
+        fun determineWinnerRound(eleccionMaquina: Int, eleccionJugador: Int) {
+            if (rondasJugadas <= rondasMaximas){
+                if ((eleccionJugador == 0 && eleccionMaquina == 2) ||
+                    (eleccionJugador == 1 && eleccionMaquina == 0) ||
+                    (eleccionJugador == 2 && eleccionMaquina == 1)
+                ) {
+                    // Si gana el jugador
+                    EstadoTV.text = "VICTORIA"
+                    puntj++
+                    Log.d(TAG, "El jugador ha ganado")
+                } else if ((eleccionJugador == 0 && eleccionMaquina == 0) ||
+                    (eleccionJugador == 1 && eleccionMaquina == 1) ||
+                    (eleccionJugador == 2 && eleccionMaquina == 2)){
+                    // Si empata el jugador
+                    EstadoTV.text = "EMPATE"
+                    Log.d(TAG, "El juego ha quedado en empate")
+                } else {
+                    // Si pierde el jugador
+                    EstadoTV.text = "DERROTA"
+                    puntm++
+                    Log.d(TAG, "El jugador ha perdido")
+                }
+
+                updateCountRound()
+                updateCountPlayers()
+                determineWinner()
+                rondasJugadas++
+            }
+        }
+
+        PiedraBT.setOnClickListener {
+            val result = playMachine()
+            imgJugador.setImageResource(R.drawable.piedra)
+            imgMaquina.setImageResource(getDrawableResource(result))
+            determineWinnerRound(result,0)
+        }
+        PapelBT.setOnClickListener {
+            val result = playMachine()
+            imgJugador.setImageResource(R.drawable.papel)
+            imgMaquina.setImageResource(getDrawableResource(result))
+            determineWinnerRound(result,1)
+        }
+        TijerasBTT.setOnClickListener {
+            val result = playMachine()
+            imgJugador.setImageResource(R.drawable.tijera)
+            imgMaquina.setImageResource(getDrawableResource(result))
+            determineWinnerRound(result,2)
+        }
+
+        salir.setOnClickListener {
+            val intent = Intent(this,Menu::class.java)
+            intent.putExtra("Jugador_ID",idUser)
+            startActivity(intent)
+        }
+    }
 
 }

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.ppt_kotders.JuegoModelo
 import com.example.ppt_kotders.JugadorModelo
 
 class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
@@ -45,7 +46,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
             db.execSQL(createTablePartidas)
         } catch (e: SQLiteException) {
-            Log.d("$TAG (onCreate)", e.message.toString())
+            Log.e("$TAG (onCreate)", e.message.toString())
         }
     }
 
@@ -160,35 +161,37 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     }
 
-    /*fun obtenerDatosPartidas(): List<Pair<String, String>> {
+    fun listPlayerGames(idUser : Int): List<JuegoModelo> { // Uso del singleton
+        val list = mutableListOf<JuegoModelo>()
 
-        val datosPartidas = mutableListOf<Pair<String, String>>()
+        val jugador = getUser(idUser) // Buscamos el jugador
+        val db = this.readableDatabase
+        val columnas = arrayOf(COLUMN_RESULTADO, COLUMN_FECHAHORA)
+        val condicion = "$COLUMN_JUGADOR_NOMBRE = ?"
+        val valoresCondicion = arrayOf(jugador.nombre)
 
-        try {
-            val db = this.readableDatabase
-            val query = "SELECT $COLUMN_RESULTADO, $COLUMN_FECHAHORA FROM $TABLE_PARTIDAS"
-            val cursor = db.rawQuery(query, null)
+        val cursor = db.query(TABLE_PARTIDAS, columnas, condicion, valoresCondicion, null, null, null)
 
-            if (cursor.moveToFirst()) {
-                do {
-                    val resultado = cursor.getString(cursor.getColumnIndex(COLUMN_RESULTADO))
-                    val fechaHora = cursor.getString(cursor.getColumnIndex(COLUMN_FECHAHORA))
+        val columnIndex = cursor.getColumnIndex(COLUMN_RESULTADO)
+        val columnIndex2 = cursor.getColumnIndex(COLUMN_FECHAHORA)
 
-                    val estadoFechaHora = Pair(resultado, fechaHora)
-                    datosPartidas.add(estadoFechaHora)
-                } while (cursor.moveToNext())
-            }
+        while (cursor.moveToNext()) {
+            val resultado = cursor.getString(columnIndex)
+            val fechaHora = cursor.getString(columnIndex2).toString()
 
-            cursor.close()
-            db.close()
+            val Item = JuegoModelo( jugador.nombre, resultado, fechaHora)
 
-        } catch (e: SQLiteException) {
-            Log.e(TAG, "Error al obtener datos de partidas: ${e.message}")
+            list.add(Item)
         }
 
-        return datosPartidas
-    }*/
+        cursor.close()
+        db.close()
+
+        return list
+    }
+
 }
+
 
 
 

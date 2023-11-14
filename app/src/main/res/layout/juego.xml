@@ -31,9 +31,9 @@
             android:layout_marginLeft="100dp"
             android:layout_marginRight="10dp"
             android:fontFamily="@font/annie_use_your_telescope"
-            android:text="RONDA:"
+            android:text="  TIEMPO :"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="32sp"
+            android:textSize="34sp"
             android:textStyle="bold" />
 
         <TextView
@@ -44,7 +44,7 @@
             android:fontFamily="@font/annie_use_your_telescope"
             android:text="00"
             android:textColor="@color/purple_500"
-            android:textSize="38sp"
+            android:textSize="48sp"
             android:textStyle="bold" />
 
     </LinearLayout>

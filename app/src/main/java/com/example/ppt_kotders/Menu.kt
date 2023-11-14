@@ -3,13 +3,11 @@ package com.example.ppt_kotders
 import MyDBOpenHelper
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class Menu : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +30,7 @@ class Menu : AppCompatActivity() {
             UserSingelton.id = 0
             startActivity(intent)
             finish()
+
         }
 
 
