@@ -19,12 +19,11 @@ class Juego : AppCompatActivity() {
         setContentView(R.layout.juego)
 
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
-        val idUser = intent.getIntExtra("Jugador_ID",-1)
+        val idUser = UserSingelton.id
 
         if(idUser == -1){ // LogOut de seguridad
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
-            finish() // Asegúrate de finalizar la actividad actual después de iniciar la nueva
             return
         }
 
@@ -47,10 +46,44 @@ class Juego : AppCompatActivity() {
 
         var puntj = 0 // Establecemos los puntuajes a 0
         var puntm = 0
-        var rondasJugadas = 0
-        var rondasMaximas = 3
+        var rondasJugadas = 1
+        var rondasMaximas = 20
 
-        contadortv.text = idUser.toString()
+        //contadortv.text = idUser.toString()
+
+        fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
+            // Registra partida
+            MyDBOpenHelper.addGame(jugador.nombre,"Victoria")
+            MyDBOpenHelper.updatePoints(jugador)
+
+            val intent = Intent(this,SolucionJuego::class.java)
+            intent.putExtra("Resultado",1)
+            intent.putExtra("Jugador_ID",idUser)
+            startActivity(intent)
+        }
+
+        fun lose(){
+            MyDBOpenHelper.addGame(jugador.nombre,"Derrota")
+            val intent = Intent(this,SolucionJuego::class.java)
+            intent.putExtra("Jugador_ID",idUser)
+            intent.putExtra("Resultado",0)
+            startActivity(intent)
+        }
+
+        fun determineWinner(){
+            if (puntj == 3 || puntm == 3) {
+                when {
+                    puntj == 3 -> {
+                        UserSingelton.estado = 1
+                        win()
+                    }
+                    puntm == 3 -> {
+                        UserSingelton.estado = 2
+                        lose()
+                    }
+                }
+            }
+        }
 
         fun updateCountRound(){
             contadortv.text = rondasJugadas.toString()
@@ -62,6 +95,8 @@ class Juego : AppCompatActivity() {
             Log.d("$TAG", "Se ha actualizado el contador de victorias del jugador")
             ContMtv.text = puntm.toString()
             Log.d("$TAG", "Se ha actualizado el contador de victorias de la máquina")
+
+
         }
 
         fun playMachine(): Int{
@@ -69,26 +104,28 @@ class Juego : AppCompatActivity() {
         }
 
         fun getDrawableResource(result: Int) : Int {
+            Log.d("$TAG", "Se ha actualizado la elección del gesto")
             return when (result) {
-                0 -> R.drawable.papel
-                1 -> R.drawable.piedra
+                0 -> R.drawable.piedra
+                1 -> R.drawable.papel
                 2 -> R.drawable.tijera
                 else -> R.drawable.incognito
             }
-            Log.d("$TAG", "Se ha actualizado la elección de gesto")
         }
 
-        fun determineWinner(eleccionMaquina: Int, eleccionJugador: Int) {
-            if (rondasJugadas < rondasMaximas){
-                if ((eleccionJugador == 0 && eleccionMaquina == 1) ||
-                    (eleccionJugador == 1 && eleccionMaquina == 2) ||
-                    (eleccionJugador == 2 && eleccionMaquina == 0)
+        fun determineWinnerRound(eleccionMaquina: Int, eleccionJugador: Int) {
+            if (rondasJugadas <= rondasMaximas){
+                if ((eleccionJugador == 0 && eleccionMaquina == 2) ||
+                    (eleccionJugador == 1 && eleccionMaquina == 0) ||
+                    (eleccionJugador == 2 && eleccionMaquina == 1)
                 ) {
                     // Si gana el jugador
                     EstadoTV.text = "VICTORIA"
                     puntj++
                     Log.d(TAG, "El jugador ha ganado")
-                } else if (eleccionJugador == eleccionMaquina){
+                } else if ((eleccionJugador == 0 && eleccionMaquina == 0) ||
+                    (eleccionJugador == 1 && eleccionMaquina == 1) ||
+                    (eleccionJugador == 2 && eleccionMaquina == 2)){
                     // Si empata el jugador
                     EstadoTV.text = "EMPATE"
                     Log.d(TAG, "El juego ha quedado en empate")
@@ -101,6 +138,7 @@ class Juego : AppCompatActivity() {
 
                 updateCountRound()
                 updateCountPlayers()
+                determineWinner()
                 rondasJugadas++
             }
         }
@@ -109,19 +147,19 @@ class Juego : AppCompatActivity() {
             val result = playMachine()
             imgJugador.setImageResource(R.drawable.piedra)
             imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinner(result,0)
+            determineWinnerRound(result,0)
         }
         PapelBT.setOnClickListener {
             val result = playMachine()
             imgJugador.setImageResource(R.drawable.papel)
             imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinner(result,1)
+            determineWinnerRound(result,1)
         }
         TijerasBTT.setOnClickListener {
             val result = playMachine()
             imgJugador.setImageResource(R.drawable.tijera)
             imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinner(result,2)
+            determineWinnerRound(result,2)
         }
 
         salir.setOnClickListener {
@@ -129,25 +167,6 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }
-
-        fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
-            // Registra partida
-            MyDBOpenHelper.addGame(jugador.nombre.toString(),"Victoria")
-            MyDBOpenHelper.updatePoints(jugador)
-
-            val intent = Intent(this,SolucionJuego::class.java)
-            intent.putExtra("Resultado",1)
-            intent.putExtra("Jugador_ID",idUser)
-            startActivity(intent)
-        }
-
-        fun lose(){
-            MyDBOpenHelper.addGame(jugador.nombre.toString(),"Derrota")
-            val intent = Intent(this,SolucionJuego::class.java)
-            intent.putExtra("Jugador_ID",idUser)
-            intent.putExtra("Resultado",0)
-            startActivity(intent)
-        }
-}
+    }
 
 }

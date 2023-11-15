@@ -3,13 +3,11 @@ package com.example.ppt_kotders
 import MyDBOpenHelper
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class Menu : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,21 +27,24 @@ class Menu : AppCompatActivity() {
 
         if (idUser == -1) { // LogOut de seguridad
             val intent = Intent(this, MainActivity::class.java)
+            UserSingelton.id = 0
             startActivity(intent)
+            finish()
 
         }
 
 
         jugarBt.setOnClickListener {
             val intent = Intent(this, Juego::class.java)
-            intent.putExtra("Jugador_ID", idUser) // Adjuntar el ID del jugador al Intent
             startActivity(intent)
+            finish()
 
         }
 
         historicoBt.setOnClickListener {
             val intent = Intent(this, Historico::class.java)
             startActivity(intent)
+            finish()
 
         }
     }
