@@ -1,4 +1,4 @@
-package com.example.ppt_kotders
+package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
 import android.content.Intent
@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ppt_kotders.MainActivity
+import com.example.ppt_kotders.R
+import com.example.ppt_kotders.UserSingelton
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -13,7 +16,7 @@ class Menu : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.menu) // layout menu
+        setContentView(R.layout.activity_menu) // layout menu
 
         val jugarBt = findViewById<Button>(R.id.btjugar)
         val historicoBt = findViewById<Button>(R.id.bthistorico)

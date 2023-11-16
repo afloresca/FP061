@@ -12,16 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ppt_kotders.ui.theme.PPT_KotdersTheme
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
-import android.util.Log
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.example.ppt_kotders.controllers.Menu
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.inicio)
+        setContentView(R.layout.activity_main)
 
         val loginbt = findViewById<Button>(R.id.btlog)
         val inserttxt = findViewById<EditText>(R.id.editTextText2)

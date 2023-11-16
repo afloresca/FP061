@@ -1,4 +1,4 @@
-package com.example.ppt_kotders
+package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
 import android.content.Intent
@@ -9,7 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import com.example.ppt_kotders.MainActivity
+import com.example.ppt_kotders.R
+import com.example.ppt_kotders.UserSingelton
 import io.reactivex.rxjava3.core.Observable
 
 class Juego : AppCompatActivity() {
@@ -18,13 +20,13 @@ class Juego : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.juego)
+        setContentView(R.layout.activity_juego)
 
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
         val idUser = UserSingelton.id
 
         if(idUser == -1){ // LogOut de seguridad
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             return
         }
@@ -172,7 +174,7 @@ class Juego : AppCompatActivity() {
         }
 
         salir.setOnClickListener {
-            val intent = Intent(this,Menu::class.java)
+            val intent = Intent(this, Menu::class.java)
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }

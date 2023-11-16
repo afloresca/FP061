@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.ppt_kotders.JuegoModelo
-import com.example.ppt_kotders.JugadorModelo
+import com.example.ppt_kotders.models.JuegoModelo
+import com.example.ppt_kotders.models.JugadorModelo
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 

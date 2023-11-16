@@ -1,4 +1,4 @@
-package com.example.ppt_kotders
+package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ppt_kotders.R
+import com.example.ppt_kotders.UserSingelton
 import com.example.ppt_kotders.adapter.ItemAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
@@ -22,7 +24,7 @@ class Historico : AppCompatActivity() {
 
 
         btSalir.setOnClickListener(){
-            val intent = Intent(this,Menu::class.java)
+            val intent = Intent(this, Menu::class.java)
             startActivity(intent)
             finish()
         }
