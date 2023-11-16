@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.ppt_kotders.JuegoModelo
 import com.example.ppt_kotders.JugadorModelo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -59,6 +61,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
         Log.d("${ContentValues.TAG} (onOpen)", "¡¡Base de datos abierta!!")
     }
 
+    // Agrega un nuevo jugador a la BD
     fun addPlayer(nombre: String, puntos: Int) {
         // Se crea un ArrayMap<>() haciendo uso de ContentValues()
         val data = ContentValues()
@@ -71,16 +74,25 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
         db.close()
     }
 
-    fun addGame(nombreJugador: String, result: String) {
-        // Se crea un ArrayMap<>() haciendo uso de ContentValues()
-        val data = ContentValues()
-        data.put(COLUMN_JUGADOR_NOMBRE, nombreJugador)
-        data.put(COLUMN_RESULTADO, result)
+    // Agrega un nuevo juego a la BD
+    fun addGame(nombreJugador: String, result: String): Observable<Unit> {
+        return Observable.create { emitter ->
+            try {
+                val data = ContentValues()
+                data.put(COLUMN_JUGADOR_NOMBRE, nombreJugador)
+                data.put(COLUMN_RESULTADO, result)
 
-        // Se abre la BD en modo escritura
-        val db = this.writableDatabase
-        db.insert(TABLE_PARTIDAS, null, data)
-        db.close()
+                // Se abre la BD en modo escritura
+                val db = this.writableDatabase
+                db.insert(TABLE_PARTIDAS, null, data)
+                db.close()
+
+                emitter.onNext(Unit)
+                emitter.onComplete()
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }.subscribeOn(Schedulers.io())
     }
 
     fun getUserID(playername: String):Int{ // Devuelve un objeto vacio sino encuentra uno
@@ -105,89 +117,137 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
 
     }
 
-    fun getUser(playerId:Int):JugadorModelo{
-        var jugadorModelo : JugadorModelo?=null
-        val db = this.readableDatabase
-        val columnas = arrayOf(COLUMN_ID, COLUMN_NOMBRE, COLUMN_PUNTOS)
-        val condicion = "$COLUMN_ID = ?" // Puedes ajustar esta condición según tus necesidades
-        val valoresCondicion = arrayOf(playerId.toString()) // Puedes ajustar el valor según el jugador que estás buscando
-        val cursor = db.query(TABLE_JUGADORES, columnas, condicion, valoresCondicion, null, null, null)
+    fun getUserIDWithRX(playername: String): Observable<Int> { // Devuelve un objeto vacio sino encuentra uno
+        return Observable.create { emitter ->
+            try {
+                var id = 0
+                val db = this.readableDatabase
+                val columnas = arrayOf(COLUMN_ID, COLUMN_NOMBRE, COLUMN_PUNTOS)
+                val condicion = "$COLUMN_NOMBRE = ?"
+                val valoresCondicion = arrayOf(playername)
+                val cursor = db.query(TABLE_JUGADORES, columnas, condicion, valoresCondicion, null, null, null)
+                if (cursor.moveToFirst()) {
+                    val columnIndex = cursor.getColumnIndex(COLUMN_ID)
+                    if (columnIndex != -1) {
+                        id = cursor.getInt(columnIndex)
+                        cursor.close()
+                        db.close()
+                        emitter.onNext(id)
+                        emitter.onComplete()
+                    }
+                }
+                cursor.close()
+                db.close()
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }.subscribeOn(Schedulers.io()) // sino devuelve vacio
+    }
 
-        if (cursor.moveToFirst()) {
-            val columnIndex = cursor.getColumnIndex(COLUMN_ID);
-            val nameIndex = cursor.getColumnIndex(COLUMN_NOMBRE)
-            val puntosIndex = cursor.getColumnIndex(COLUMN_PUNTOS)
+    fun getUser(playerId: Int): Observable<JugadorModelo> {
+        return Observable.create { emitter ->
+            try {
+                var jugadorModelo: JugadorModelo? = null
+                val db = this.readableDatabase
+                val columnas = arrayOf(COLUMN_ID, COLUMN_NOMBRE, COLUMN_PUNTOS)
+                val condicion = "$COLUMN_ID = ?"
+                val valoresCondicion = arrayOf(playerId.toString())
+                val cursor = db.query(TABLE_JUGADORES, columnas, condicion, valoresCondicion, null, null, null)
 
-            if(columnIndex!=-1){
+                if (cursor.moveToFirst()) {
+                    val columnIndex = cursor.getColumnIndex(COLUMN_ID)
+                    val nameIndex = cursor.getColumnIndex(COLUMN_NOMBRE)
+                    val puntosIndex = cursor.getColumnIndex(COLUMN_PUNTOS)
 
-                val id = cursor.getInt(columnIndex)
-                val nombre = cursor.getString(nameIndex)
-                val puntos = cursor.getInt(puntosIndex)
-                jugadorModelo = JugadorModelo(id,nombre,puntos)
+                    if (columnIndex != -1) {
+                        val id = cursor.getInt(columnIndex)
+                        val nombre = cursor.getString(nameIndex)
+                        val puntos = cursor.getInt(puntosIndex)
+                        jugadorModelo = JugadorModelo(id, nombre, puntos)
 
+                        cursor.close()
+                        db.close()
+
+                        emitter.onNext(jugadorModelo)
+                        emitter.onComplete()
+                    }
+                }
                 cursor.close()
                 db.close()
 
-                return jugadorModelo;
-
+                jugadorModelo = JugadorModelo(0, "", 0)
+                emitter.onNext(jugadorModelo)
+                emitter.onComplete()
+            } catch (e: Exception) {
+                emitter.onError(e)
             }
-
-        }
-        cursor.close()
-        db.close()
-
-        jugadorModelo = JugadorModelo(0,"",0);
-
-        return jugadorModelo;
+        }.subscribeOn(Schedulers.io())
     }
 
-    fun updatePoints(jugadorModelo: JugadorModelo){
-
-        val newpoints = jugadorModelo.puntuacion + 1 // Los puntos del jugador han cambiado
-        val db=this.writableDatabase;
-
-        val valores = ContentValues()
-        valores.put(COLUMN_PUNTOS, newpoints)
-        val condicion = "$COLUMN_ID = ?"
-        val valoresCondicion = arrayOf(jugadorModelo.id.toString())
-        val filasActualizadas = db.update(TABLE_JUGADORES, valores, condicion, valoresCondicion)
-        if (filasActualizadas > 0) {
-            print( " 1 row afected ")
-        }else {
-            print("Error Update Row ")
-        }
-
-            db.close()
-
+    fun updatePoints(jugadorModelo: JugadorModelo): Observable<Unit> {
+        return Observable.create { emitter ->
+            try {
+                val newpoints = jugadorModelo.puntuacion + 1
+                val db = this.writableDatabase
+                val valores = ContentValues()
+                valores.put(COLUMN_PUNTOS, newpoints)
+                val condicion = "$COLUMN_ID = ?"
+                val valoresCondicion = arrayOf(jugadorModelo.id.toString())
+                val filasActualizadas = db.update(TABLE_JUGADORES, valores, condicion, valoresCondicion)
+                if (filasActualizadas > 0) {
+                    emitter.onNext(Unit)
+                    emitter.onComplete()
+                } else {
+                    emitter.onError(Exception("Error al actualizar la columna"))
+                }
+                db.close()
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }.subscribeOn(Schedulers.io())
     }
 
-    fun listPlayerGames(idUser : Int): List<JuegoModelo> { // Uso del singleton
-        val list = mutableListOf<JuegoModelo>()
+    fun listPlayerGames(idUser: Int): Observable<MutableList<JuegoModelo>> {
+        return getUser(idUser)
+            .flatMap { jugador ->
+                if (jugador != null) {
+                    Observable.create<MutableList<JuegoModelo>> { emitter ->
+                        try {
+                            val db = this.readableDatabase
+                            val columnas = arrayOf(COLUMN_RESULTADO, COLUMN_FECHAHORA)
+                            val condicion = "$COLUMN_JUGADOR_NOMBRE = ?"
+                            val valoresCondicion = arrayOf(jugador.nombre)
 
-        val jugador = getUser(idUser) // Buscamos el jugador
-        val db = this.readableDatabase
-        val columnas = arrayOf(COLUMN_RESULTADO, COLUMN_FECHAHORA)
-        val condicion = "$COLUMN_JUGADOR_NOMBRE = ?"
-        val valoresCondicion = arrayOf(jugador.nombre)
+                            val cursor = db.query(TABLE_PARTIDAS, columnas, condicion, valoresCondicion, null, null, null)
 
-        val cursor = db.query(TABLE_PARTIDAS, columnas, condicion, valoresCondicion, null, null, null)
+                            val columnIndexResultado = cursor.getColumnIndex(COLUMN_RESULTADO)
+                            val columnIndexFechaHora = cursor.getColumnIndex(COLUMN_FECHAHORA)
 
-        val columnIndex = cursor.getColumnIndex(COLUMN_RESULTADO)
-        val columnIndex2 = cursor.getColumnIndex(COLUMN_FECHAHORA)
+                            val list = mutableListOf<JuegoModelo>()
 
-        while (cursor.moveToNext()) {
-            val resultado = cursor.getString(columnIndex)
-            val fechaHora = cursor.getString(columnIndex2).toString()
+                            while (cursor.moveToNext()) {
+                                val resultado = cursor.getString(columnIndexResultado)
+                                val fechaHora = cursor.getString(columnIndexFechaHora).toString()
 
-            val Item = JuegoModelo( jugador.nombre, resultado, fechaHora)
+                                val item = JuegoModelo(jugador.nombre, resultado, fechaHora)
 
-            list.add(Item)
-        }
+                                list.add(item)
+                            }
 
-        cursor.close()
-        db.close()
+                            cursor.close()
+                            db.close()
 
-        return list
+                            emitter.onNext(list)
+                            emitter.onComplete()
+                        } catch (e: Exception) {
+                            emitter.onError(e)
+                        }
+                    }
+                } else {
+                    Observable.error(NullPointerException("El jugador es nulo"))
+                }
+            }
+            .subscribeOn(Schedulers.io())
     }
 
 }

@@ -12,25 +12,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ppt_kotders.ui.theme.PPT_KotdersTheme
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
+import android.util.Log
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.inicio)
 
         val loginbt = findViewById<Button>(R.id.btlog)
         val inserttxt = findViewById<EditText>(R.id.editTextText2)
-        val textview =findViewById<TextView>(R.id.textView8)
+        val textview = findViewById<TextView>(R.id.textView8)
 
-        val myDBOpenHelper = MyDBOpenHelper(this,null)
+        val myDBOpenHelper = MyDBOpenHelper(this, null)
 
         // Se introduce el texto
 
-        loginbt.setOnClickListener(){
+        loginbt.setOnClickListener() {
 
-            var nombreplayer =inserttxt.text.toString()
+            var nombreplayer = inserttxt.text.toString()
 
-            if(nombreplayer==""){
+            if (nombreplayer == "") {
                 textview.text = " Introduce un nombre"
             } else {
                 var id = myDBOpenHelper.getUserID(nombreplayer)
@@ -47,43 +52,24 @@ class MainActivity : ComponentActivity() {
             }
 
 
-
         }
-
-
-
-
-
-        /*setContent {
-             PPT_KotdersTheme {
-                 // A surface container using the 'background' color from the theme
-                 Surface(
-                     modifier = Modifier.fillMaxSize(),
-                     color = MaterialTheme.colorScheme.background
-                 ) {
-                     Greeting("Android")
-                 }
-             }
-         */
-        //}
     }
-}
 
 
+    @Composable
+    fun Greeting(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
+    }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PPT_KotdersTheme {
-        Greeting("Android")
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        PPT_KotdersTheme {
+            Greeting("Android")
+        }
     }
 }
 

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class Menu : AppCompatActivity() {
 
@@ -20,9 +22,18 @@ class Menu : AppCompatActivity() {
 
         val MyDBOpenHelper = MyDBOpenHelper(this, null)
         var idUser = UserSingelton.id
-        var jugador = MyDBOpenHelper.getUser(idUser)
-        nombre.text = jugador.nombre.toString()
-        puntos.text = jugador.puntuacion.toString()
+
+        MyDBOpenHelper.getUser(idUser)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ jugador ->
+                // Actualizar la interfaz de usuario con los datos del jugador
+                nombre.text = jugador.nombre
+                puntos.text = jugador.puntuacion.toString()
+            }, { error ->
+                // Manejar el error, si es necesario
+                TODO()
+            })
 
 
         if (idUser == -1) { // LogOut de seguridad
