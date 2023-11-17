@@ -13,22 +13,22 @@
         android:theme="@style/Theme.PPT_Kotders"
         tools:targetApi="31">
         <activity
-            android:name=".controllers.Historico"
+            android:name=".Historico"
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat"/>
         <activity
-            android:name=".controllers.SolucionJuego"
+            android:name=".SolucionJuego"
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat"/>
         <activity
-            android:name=".controllers.Juego"
+            android:name=".Juego"
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat"/>
         <activity
-            android:name=".controllers.Menu"
+            android:name=".Menu"
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat"/>

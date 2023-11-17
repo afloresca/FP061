@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <Button
+        android:id="@+id/btSalir"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:layout_margin="10dp"
+        android:backgroundTint="#FFC107"
+        android:fontFamily="@font/annie_use_your_telescope"
+        android:text="SALIR"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tiempotv"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="  TIEMPO :"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/contadortv"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="00"
+            android:textColor="@color/purple_500"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/estadotv"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/annie_use_your_telescope"
+        android:text="ESTADO"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="150dp"
+       android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imgmaquina"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/incognito" />
+
+        <ImageView
+            android:id="@+id/imgjugador"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+
+            android:layout_marginRight="50dp"
+            android:src="@drawable/incognito" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtmaquina"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="MAQUINA"
+            android:textColor="@color/teal_200"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtjugador"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="50dp"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="JUGADOR"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txmaquina"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="50dp"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtu"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/intruccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="10dp"
+        android:fontFamily="@font/annie_use_your_telescope"
+        android:text="ELIGE QUE QUIERES:"
+        android:textColor="@color/purple_500"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/btpapel"
+                android:layout_width="130dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="10dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Botón de Papel"
+                android:scaleType="fitXY"
+                android:src="@drawable/papel" />
+
+            <ImageButton
+                android:id="@+id/btpiedra"
+                android:layout_width="130dp"
+                android:layout_height="150dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Botón de Piedra"
+                android:scaleType="fitXY"
+                android:src="@drawable/piedra" />
+
+            <ImageButton
+                android:id="@+id/bttijeras"
+                android:layout_width="130dp"
+                android:layout_height="150dp"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Botón de Tijeras "
+                android:scaleType="fitXY"
+                android:src="@drawable/tijera2" />
+
+        </LinearLayout>
+
+
+
+
+</LinearLayout>

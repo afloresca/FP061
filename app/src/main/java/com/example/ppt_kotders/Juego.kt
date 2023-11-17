@@ -1,4 +1,4 @@
-package com.example.ppt_kotders.controllers
+package com.example.ppt_kotders
 
 import MyDBOpenHelper
 import android.content.Intent
@@ -9,10 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import com.example.ppt_kotders.MainActivity
-import com.example.ppt_kotders.R
-import com.example.ppt_kotders.UserSingelton
-import io.reactivex.rxjava3.core.Observable
 
 class Juego : AppCompatActivity() {
     val TAG = "Juego"
@@ -20,13 +16,13 @@ class Juego : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_juego)
+        setContentView(R.layout.juego)
 
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
         val idUser = UserSingelton.id
 
         if(idUser == -1){ // LogOut de seguridad
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
             return
         }
@@ -51,46 +47,39 @@ class Juego : AppCompatActivity() {
         var puntj = 0 // Establecemos los puntuajes a 0
         var puntm = 0
         var rondasJugadas = 1
-        var rondasMaximas = 50
+        var rondasMaximas = 20
 
+        //contadortv.text = idUser.toString()
 
-        fun win(): Observable<Unit> {
-            return MyDBOpenHelper.getUser(idUser)
-                .flatMap { jugador ->
-                    MyDBOpenHelper.addGame(jugador.nombre, "Victoria")
-                        .concatWith(MyDBOpenHelper.updatePoints(jugador))
-                }
-                .doOnComplete {
-                    val intent = Intent(this, SolucionJuego::class.java)
-                    intent.putExtra("Resultado", 1)
-                    intent.putExtra("Jugador_ID", idUser)
-                    startActivity(intent)
-                }
+        fun win(){ // Si el jugador gana añade las monedas y pasa al layout de victoria
+            // Registra partida
+            MyDBOpenHelper.addGame(jugador.nombre,"Victoria")
+            MyDBOpenHelper.updatePoints(jugador)
+
+            val intent = Intent(this,SolucionJuego::class.java)
+            intent.putExtra("Resultado",1)
+            intent.putExtra("Jugador_ID",idUser)
+            startActivity(intent)
         }
 
-        fun lose(): Observable<Unit> {
-            return MyDBOpenHelper.getUser(idUser)
-                .flatMap { jugador ->
-                    MyDBOpenHelper.addGame(jugador.nombre, "Derrota")
-                }
-                .doOnComplete {
-                    val intent = Intent(this, SolucionJuego::class.java)
-                    intent.putExtra("Jugador_ID", idUser)
-                    intent.putExtra("Resultado", 0)
-                    startActivity(intent)
-                }
+        fun lose(){
+            MyDBOpenHelper.addGame(jugador.nombre,"Derrota")
+            val intent = Intent(this,SolucionJuego::class.java)
+            intent.putExtra("Jugador_ID",idUser)
+            intent.putExtra("Resultado",0)
+            startActivity(intent)
         }
 
-        fun determineWinner() {
+        fun determineWinner(){
             if (puntj == 3 || puntm == 3) {
                 when {
                     puntj == 3 -> {
                         UserSingelton.estado = 1
-                        win().subscribe()
+                        win()
                     }
                     puntm == 3 -> {
                         UserSingelton.estado = 2
-                        lose().subscribe()
+                        lose()
                     }
                 }
             }
@@ -174,7 +163,7 @@ class Juego : AppCompatActivity() {
         }
 
         salir.setOnClickListener {
-            val intent = Intent(this, Menu::class.java)
+            val intent = Intent(this,Menu::class.java)
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }

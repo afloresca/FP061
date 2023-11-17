@@ -12,27 +12,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ppt_kotders.ui.theme.PPT_KotdersTheme
-import com.example.ppt_kotders.controllers.Menu
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.inicio)
 
         val loginbt = findViewById<Button>(R.id.btlog)
         val inserttxt = findViewById<EditText>(R.id.editTextText2)
-        val textview = findViewById<TextView>(R.id.textView8)
+        val textview =findViewById<TextView>(R.id.textView8)
 
-        val myDBOpenHelper = MyDBOpenHelper(this, null)
+        val myDBOpenHelper = MyDBOpenHelper(this,null)
 
         // Se introduce el texto
 
-        loginbt.setOnClickListener() {
+        loginbt.setOnClickListener(){
 
-            var nombreplayer = inserttxt.text.toString()
+            var nombreplayer =inserttxt.text.toString()
 
-            if (nombreplayer == "") {
+            if(nombreplayer==""){
                 textview.text = " Introduce un nombre"
             } else {
                 var id = myDBOpenHelper.getUserID(nombreplayer)
@@ -49,24 +47,27 @@ class MainActivity : ComponentActivity() {
             }
 
 
+
         }
+
     }
+}
 
 
-    @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
-    }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun GreetingPreview() {
-        PPT_KotdersTheme {
-            Greeting("Android")
-        }
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    PPT_KotdersTheme {
+        Greeting("Android")
     }
 }
 

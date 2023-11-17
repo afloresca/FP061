@@ -1,4 +1,4 @@
-package com.example.ppt_kotders.models
+package com.example.ppt_kotders
 
 class JuegoModelo{
 

@@ -1,4 +1,4 @@
-package com.example.ppt_kotders.controllers
+package com.example.ppt_kotders
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,9 +6,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ppt_kotders.MainActivity
-import com.example.ppt_kotders.R
-import com.example.ppt_kotders.UserSingelton
 
 class SolucionJuego : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +52,7 @@ class SolucionJuego : AppCompatActivity() {
     }
 
     fun logout(){ // Detecta el estado default y rectifica el error logout
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this,MainActivity::class.java)
         UserSingelton.id = 0
         UserSingelton.estado = 0
         startActivity(intent)

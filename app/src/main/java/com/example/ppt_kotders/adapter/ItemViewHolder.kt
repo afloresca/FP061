@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ppt_kotders.models.JuegoModelo
+import com.example.ppt_kotders.JuegoModelo
 import com.example.ppt_kotders.R
 
 class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {
