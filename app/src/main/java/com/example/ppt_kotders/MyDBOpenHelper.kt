@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.ppt_kotders.controllers.Ubicacion
 import com.example.ppt_kotders.models.JuegoModelo
 import com.example.ppt_kotders.models.JugadorModelo
 import io.reactivex.rxjava3.core.Observable
@@ -13,9 +14,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
     val TAG = "SQLite"
+
     companion object {
 
-        val DATABASE_VERSION = 1
+        val DATABASE_VERSION = 2
         val DATABASE_NAME = "kot.db"
 
         val TABLE_JUGADORES = "JUGADORES"
@@ -28,7 +30,10 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
         val COLUMN_JUGADOR_NOMBRE = "jugador_nombre"
         val COLUMN_RESULTADO = "resultado"
         val COLUMN_FECHAHORA = "fechahora"
+        val COLUMN_LATITUD = "latitud"
+        val COLUMN_LONGITUD = "longitud"
     }
+
 
     override fun onCreate(db: SQLiteDatabase?) {
         try {
@@ -42,10 +47,9 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
             // Crear la tabla Partidas
             val createTablePartidas = "CREATE TABLE $TABLE_PARTIDAS" +
                     "(${COLUMN_PARTIDA_ID}_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "${COLUMN_JUGADOR_NOMBRE} VARCHAR (60)," +
+                    "$COLUMN_JUGADOR_NOMBRE VARCHAR (60)," +
                     "$COLUMN_RESULTADO VARCHAR(10), " +
                     "$COLUMN_FECHAHORA DATETIME DEFAULT CURRENT_TIMESTAMP)"
-
             db.execSQL(createTablePartidas)
         } catch (e: SQLiteException) {
             Log.e("$TAG (onCreate)", e.message.toString())
@@ -53,7 +57,11 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        TODO("Not yet implemented")
+        if ((oldVersion < newVersion) && (newVersion == 2)){
+            db?.execSQL("ALTER TABLE $TABLE_PARTIDAS ADD COLUMN $COLUMN_LATITUD DOUBLE")
+            db?.execSQL("ALTER TABLE $TABLE_PARTIDAS ADD COLUMN $COLUMN_LONGITUD DOUBLE")
+        }
+
     }
 
     override fun onOpen(db: SQLiteDatabase?) {
@@ -78,9 +86,12 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
     fun addGame(nombreJugador: String, result: String): Observable<Unit> {
         return Observable.create { emitter ->
             try {
+                Log.d("¡¡¡¡¡¡¡ ---- GPS", "LAT: ${Ubicacion.getLatitud()} - LON : ${Ubicacion.getLongitud()}  !!!!!!!!")
                 val data = ContentValues()
                 data.put(COLUMN_JUGADOR_NOMBRE, nombreJugador)
                 data.put(COLUMN_RESULTADO, result)
+                data.put(COLUMN_LATITUD, Ubicacion.getLatitud())
+                data.put(COLUMN_LONGITUD, Ubicacion.getLongitud())
 
                 // Se abre la BD en modo escritura
                 val db = this.writableDatabase
