@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/design_default_color_error"
             android:fontFamily="@font/annie_use_your_telescope"
-            android:text="ayuda"
+            android:text="@string/tx_help"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -66,7 +66,7 @@
         android:layout_gravity="center"
         android:backgroundTint="#00BCD4"
         android:fontFamily="@font/annie_use_your_telescope"
-        android:text="Jugar"
+        android:text="@string/bt_play"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         android:textSize="42sp"
         android:textStyle="bold" />
@@ -81,7 +81,7 @@
         android:layout_gravity="center"
         android:backgroundTint="#E91E63"
         android:fontFamily="@font/annie_use_your_telescope"
-        android:text="Historico"
+        android:text="@string/tx_my_games"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         android:textSize="36sp"
         android:textStyle="bold" />

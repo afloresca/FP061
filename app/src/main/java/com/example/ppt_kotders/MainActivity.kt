@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
             var nombreplayer = inserttxt.text.toString()
 
             if (nombreplayer == "") {
-                textview.text = " Introduce un nombre"
+                textview.text = getString(R.string.not_valid)
             } else {
                 var id = myDBOpenHelper.getUserID(nombreplayer)
 

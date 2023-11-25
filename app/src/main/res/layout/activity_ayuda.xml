@@ -20,12 +20,12 @@
 
             <Button
                 android:id="@+id/btSalir"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:backgroundTint="#FFC107"
                 android:fontFamily="@font/annie_use_your_telescope"
-                android:text=""
+                android:text="@string/bt_back"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />

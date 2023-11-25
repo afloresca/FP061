@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             android:backgroundTint="#FFC107"
             android:fontFamily="@font/annie_use_your_telescope"
-            android:text="Continuar"
+            android:text="@string/bt_continue"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/black"
             android:textSize="48sp" />
