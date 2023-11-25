@@ -12,13 +12,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/logouoc"
-            android:layout_width="150dp"
-            android:layout_height="65dp"
-            android:layout_marginLeft="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/image_photoroom_png_photoroom" />
+        <Button
+            android:id="@+id/btayuda"
+            android:layout_width="wrap_content"
+            android:layout_height="59dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/design_default_color_error"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="ayuda"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
 
         <TextView
             android:id="@+id/textNombre"
@@ -47,12 +52,12 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+
     <ImageView
         android:id="@+id/logojuego"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:src="@drawable/ppt" />
-
 
     <Button
         android:id="@+id/btjugar"
@@ -84,12 +89,28 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"/>
 
-    <ImageView
-        android:id="@+id/logogrupo"
-        android:layout_width="100dp"
-        android:layout_height="65dp"
-        android:layout_gravity="center"
-        android:src="@drawable/continuar_1_" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/logogrupo"
+            android:layout_width="100dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:src="@drawable/continuar_1_" />
+
+        <ImageView
+            android:id="@+id/logouoc"
+            android:layout_width="150dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/image_photoroom_png_photoroom" />
+    </LinearLayout>
 
 
 </LinearLayout>
