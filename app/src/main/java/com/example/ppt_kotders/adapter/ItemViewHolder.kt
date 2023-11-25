@@ -24,11 +24,11 @@ class ItemViewHolder(view:View):RecyclerView.ViewHolder(view) {
         when(game.resultado){
             "Victoria"->{
                 imagen.setImageResource(R.drawable.tijera)
-                resultado.text= Resources.getSystem().getString(R.string.tx_victory)
+                resultado.apply { resultado.text=context.resources.getString(R.string.tx_victory) }
             }
             "Derrota"-> {
                 imagen.setImageResource(R.drawable.piedra)
-                resultado.text= Resources.getSystem().getString(R.string.tx_victory)
+                resultado.apply { resultado.text=context.resources.getString(R.string.tx_loose) }
 
             }
             }
