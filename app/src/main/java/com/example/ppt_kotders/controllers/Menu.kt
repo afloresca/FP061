@@ -26,6 +26,7 @@ class Menu : AppCompatActivity() {
         val MyDBOpenHelper = MyDBOpenHelper(this, null)
         var idUser = UserSingelton.id
 
+
         MyDBOpenHelper.getUser(idUser)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -49,6 +50,7 @@ class Menu : AppCompatActivity() {
 
 
         jugarBt.setOnClickListener {
+
             val intent = Intent(this, Juego::class.java)
             startActivity(intent)
             finish()
