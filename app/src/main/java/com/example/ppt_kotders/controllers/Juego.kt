@@ -10,13 +10,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import com.example.ppt_kotders.MainActivity
+import com.example.ppt_kotders.Notificacion
 import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
 import io.reactivex.rxjava3.core.Observable
 
 class Juego : AppCompatActivity() {
     val TAG = "Juego"
-
+    private val notis = Notificacion(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +25,8 @@ class Juego : AppCompatActivity() {
 
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
         val idUser = UserSingelton.id
+
+        notis.createChannel()
 
         if(idUser == -1){ // LogOut de seguridad
             val intent = Intent(this, MainActivity::class.java)
@@ -64,6 +67,7 @@ class Juego : AppCompatActivity() {
                     val intent = Intent(this, SolucionJuego::class.java)
                     intent.putExtra("Resultado", 1)
                     intent.putExtra("Jugador_ID", idUser)
+                    notis.createSimpleNotification(10)
                     startActivity(intent)
                 }
         }

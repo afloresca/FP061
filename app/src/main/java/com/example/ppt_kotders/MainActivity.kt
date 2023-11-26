@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
 import com.example.ppt_kotders.controllers.Menu
-import com.example.ppt_kotders.controllers.Ubicacion
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
@@ -73,7 +72,8 @@ class MainActivity : ComponentActivity() {
     private fun verificarPermisos() {
         val permisos = arrayListOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.POST_NOTIFICATIONS
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
             permisos.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
