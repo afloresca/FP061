@@ -1,4 +1,4 @@
-package com.example.ppt_kotders.controllers
+package com.example.ppt_kotders
 
 import androidx.compose.runtime.Composable
 import java.nio.DoubleBuffer

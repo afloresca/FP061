@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import com.example.ppt_kotders.controllers.Ubicacion
+import com.example.ppt_kotders.Ubicacion
 import com.example.ppt_kotders.models.JuegoModelo
 import com.example.ppt_kotders.models.JugadorModelo
 import io.reactivex.rxjava3.core.Observable
@@ -86,7 +86,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
     fun addGame(nombreJugador: String, result: String): Observable<Unit> {
         return Observable.create { emitter ->
             try {
-                Log.d("¡¡¡¡¡¡¡ ---- GPS", "LAT: ${Ubicacion.getLatitud()} - LON : ${Ubicacion.getLongitud()}  !!!!!!!!")
+                Log.d("---- GPS", "LAT: ${Ubicacion.getLatitud()} - LON : ${Ubicacion.getLongitud()} ")
                 val data = ContentValues()
                 data.put(COLUMN_JUGADOR_NOMBRE, nombreJugador)
                 data.put(COLUMN_RESULTADO, result)
