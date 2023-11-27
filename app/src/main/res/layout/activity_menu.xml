@@ -56,7 +56,7 @@
     <ImageView
         android:id="@+id/logojuego"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="302dp"
         android:src="@drawable/ppt" />
 
     <Button
@@ -85,31 +85,30 @@
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         android:textSize="36sp"
         android:textStyle="bold" />
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="30dp"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="103dp"
         android:orientation="horizontal">
 
 
         <ImageView
             android:id="@+id/logogrupo"
-            android:layout_width="100dp"
-            android:layout_height="65dp"
+            android:layout_width="173dp"
+            android:layout_height="38dp"
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:src="@drawable/continuar_1_" />
 
         <ImageView
             android:id="@+id/logouoc"
-            android:layout_width="150dp"
-            android:layout_height="65dp"
+            android:layout_width="115dp"
+            android:layout_height="35dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/image_photoroom_png_photoroom" />
+
     </LinearLayout>
 
 

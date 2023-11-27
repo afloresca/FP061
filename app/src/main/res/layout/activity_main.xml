@@ -42,12 +42,48 @@
             android:textColor="@color/white"
             android:textSize="48sp"
             android:textStyle="bold" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
 
-        <ImageView
-            android:id="@+id/imageView2"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/continuar_1_" />
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonLang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="50dp"
+                android:background="@color/teal_700"
+                android:fontFamily="@font/annie_use_your_telescope"
+                android:text="English"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonLang2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="50dp"
+                android:background="@color/teal_700"
+                android:fontFamily="@font/annie_use_your_telescope"
+                android:text="Español"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@drawable/continuar_1_" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
