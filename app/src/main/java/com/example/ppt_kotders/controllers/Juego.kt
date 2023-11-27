@@ -18,6 +18,7 @@ import io.reactivex.rxjava3.core.Observable
 class Juego : AppCompatActivity() {
     val TAG = "Juego"
     private val notis = Notificacion(this)
+    private val timeI = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +68,8 @@ class Juego : AppCompatActivity() {
                     val intent = Intent(this, SolucionJuego::class.java)
                     intent.putExtra("Resultado", 1)
                     intent.putExtra("Jugador_ID", idUser)
-                    notis.createSimpleNotification(10)
+                    val tiempoResultado = (System.currentTimeMillis() - timeI) / 1000
+                    notis.createSimpleNotification(tiempoResultado.toInt())
                     startActivity(intent)
                 }
         }

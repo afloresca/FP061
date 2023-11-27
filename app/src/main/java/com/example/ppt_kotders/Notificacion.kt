@@ -39,8 +39,8 @@ class Notificacion (context: Context) {
         val intent = Intent(app, NotiVictoria::class.java).apply{
             var flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        var t = 10;
-        intent.putExtra("tiempoResultado", t)
+
+        intent.putExtra("tiempoResultado", tiempoResultado)
 
         val flag = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
         val pendingIntent: PendingIntent = PendingIntent.getActivity(app, 0, intent, flag)

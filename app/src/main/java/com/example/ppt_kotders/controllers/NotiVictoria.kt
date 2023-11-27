@@ -17,7 +17,7 @@ class NotiVictoria : AppCompatActivity() {
         val imagen = findViewById<ImageView>(R.id.imageView)
         val texto = findViewById<TextView>(R.id.textVictoria)
 
-        val tiempoResultado =  this.intent.extras?.getInt("tiempoResultado")
+        val tiempoResultado = getIntent().extras?.getInt("tiempoResultado")
 
 
         imagen.setImageResource(R.drawable.ppt)
