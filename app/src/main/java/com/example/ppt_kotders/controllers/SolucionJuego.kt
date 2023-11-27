@@ -33,12 +33,12 @@ class SolucionJuego : AppCompatActivity() {
 
             1 -> {
                 imagen.setImageResource(R.drawable.ppt)
-                texto.text = " VICTORIA "
+                texto.text = getString(R.string.tx_victory)
             }
 
             2 -> {
                 imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
-                texto.text = " DERROTA "
+                texto.text = getString(R.string.tx_loose)
             }
 
             0 -> logout() // Por defecto -> error del juego

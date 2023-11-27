@@ -137,18 +137,18 @@ class Juego : AppCompatActivity() {
                     (eleccionJugador == 2 && eleccionMaquina == 1)
                 ) {
                     // Si gana el jugador
-                    EstadoTV.text = "VICTORIA"
+                    EstadoTV.text = getString(R.string.tx_victory)
                     puntj++
                     Log.d(TAG, "El jugador ha ganado")
                 } else if ((eleccionJugador == 0 && eleccionMaquina == 0) ||
                     (eleccionJugador == 1 && eleccionMaquina == 1) ||
                     (eleccionJugador == 2 && eleccionMaquina == 2)){
                     // Si empata el jugador
-                    EstadoTV.text = "EMPATE"
+                    EstadoTV.text = getString(R.string.tx_pair)
                     Log.d(TAG, "El juego ha quedado en empate")
                 } else {
                     // Si pierde el jugador
-                    EstadoTV.text = "DERROTA"
+                    EstadoTV.text = getString(R.string.tx_loose)
                     puntm++
                     Log.d(TAG, "El jugador ha perdido")
                 }

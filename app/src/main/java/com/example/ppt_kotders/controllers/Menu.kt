@@ -20,6 +20,7 @@ class Menu : AppCompatActivity() {
 
         val jugarBt = findViewById<Button>(R.id.btjugar)
         val historicoBt = findViewById<Button>(R.id.bthistorico)
+        val ayudaBt = findViewById<Button>(R.id.btayuda)
         val nombre = findViewById<TextView>(R.id.textNombre)
         val puntos = findViewById<TextView>(R.id.textPuntos)
 
@@ -55,6 +56,12 @@ class Menu : AppCompatActivity() {
             startActivity(intent)
             finish()
 
+        }
+
+        ayudaBt.setOnClickListener{
+            val intent = Intent(this, ayuda::class.java)
+            startActivity(intent)
+            finish()
         }
 
         historicoBt.setOnClickListener {
