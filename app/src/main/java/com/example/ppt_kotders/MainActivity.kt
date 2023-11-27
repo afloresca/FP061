@@ -38,8 +38,8 @@ class MainActivity : ComponentActivity() {
             var nombreplayer = inserttxt.text.toString()
 
             if (nombreplayer == "") {
-                //textview.text = getString(R.string.not_valid)
-                textview.text = UserSingelton.lang.toString()
+                textview.text = getString(R.string.not_valid)
+                //textview.text = UserSingelton.lang.toString()
             } else {
                 var id = myDBOpenHelper.getUserID(nombreplayer)
 
