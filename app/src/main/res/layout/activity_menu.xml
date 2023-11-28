@@ -60,6 +60,15 @@
         android:src="@drawable/ppt" />
 
     <Button
+        android:id="@+id/btnsilencio"
+        android:layout_width="63dp"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/altavoz"
+        android:text="Silenciar"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="10sp" />
+
+    <Button
         android:id="@+id/btjugar"
         android:layout_width="200dp"
         android:layout_height="75dp"
