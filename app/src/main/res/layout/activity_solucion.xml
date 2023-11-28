@@ -34,8 +34,21 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/design_default_color_error"
-            android:textSize="96sp"
+            android:textSize="90sp"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonScreenshot"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#E91E63"
+            android:fontFamily="@font/annie_use_your_telescope"
+            android:text="¡Guarda tu victoria!"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/buttonD"
@@ -47,7 +60,8 @@
             android:text="Continuar"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/black"
-            android:textSize="48sp" />
+            android:textSize="42sp" />
+
 
         <ImageView
             android:id="@+id/imageView5"

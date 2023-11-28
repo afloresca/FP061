@@ -89,7 +89,7 @@ class Juego : AppCompatActivity() {
                         win().subscribe()
                     }
                     puntm == 3 -> {
-                        UserSingelton.estado = 2
+                        UserSingelton.estado = 1
                         lose().subscribe()
                     }
                 }
