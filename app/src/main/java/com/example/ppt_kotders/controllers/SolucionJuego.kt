@@ -1,6 +1,7 @@
 package com.example.ppt_kotders.controllers
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -11,10 +12,14 @@ import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
 
 class SolucionJuego : AppCompatActivity() {
+    var lista = arrayOfNulls<MediaPlayer>(size = 2)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_solucion)
+
+        lista[0]=MediaPlayer.create(this,R.raw.fireworks)
+        lista[1]=MediaPlayer.create(this,R.raw.trueno)
 
         val idUser = UserSingelton.id
         val condicion = UserSingelton.estado
@@ -34,11 +39,13 @@ class SolucionJuego : AppCompatActivity() {
             1 -> {
                 imagen.setImageResource(R.drawable.ppt)
                 texto.text = getString(R.string.tx_victory)
+                lista[0]?.start()
             }
 
             2 -> {
                 imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
                 texto.text = getString(R.string.tx_loose)
+                lista[1]?.start()
             }
 
             0 -> logout() // Por defecto -> error del juego
@@ -47,7 +54,9 @@ class SolucionJuego : AppCompatActivity() {
         buttonD.setOnClickListener() {
 
             val intent = Intent(this, Menu::class.java)
-            UserSingelton.estado = 0 // Lo ponemos po defecto
+            UserSingelton.estado = 0 // Lo ponemos por defecto
+            lista[0]?.stop()
+            lista[1]?.stop()
             startActivity(intent)
             finish()
 
