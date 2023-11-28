@@ -2,6 +2,7 @@ package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -20,10 +21,18 @@ class Juego : AppCompatActivity() {
     private val notis = Notificacion(this)
     private val timeI = System.currentTimeMillis()
 
+    var listaAudios = arrayOfNulls<MediaPlayer>(size = 6)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_juego)
-
+        listaAudios[0]= MediaPlayer.create(this,R.raw.stranger)
+        listaAudios[1]= MediaPlayer.create(this,R.raw.piedra)
+        listaAudios[2]= MediaPlayer.create(this,R.raw.pagina)
+        listaAudios[3]= MediaPlayer.create(this,R.raw.tijeras)
+        listaAudios[4]= MediaPlayer.create(this,R.raw.fireworks)
+        listaAudios[5]= MediaPlayer.create(this,R.raw.trueno)
+        listaAudios[0]?.pause()
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
         val idUser = UserSingelton.id
 
@@ -164,18 +173,21 @@ class Juego : AppCompatActivity() {
             val result = playMachine()
             imgJugador.setImageResource(R.drawable.piedra)
             imgMaquina.setImageResource(getDrawableResource(result))
+            listaAudios[1]?.start()
             determineWinnerRound(result,0)
         }
         PapelBT.setOnClickListener {
             val result = playMachine()
             imgJugador.setImageResource(R.drawable.papel)
             imgMaquina.setImageResource(getDrawableResource(result))
+            listaAudios[2]?.start()
             determineWinnerRound(result,1)
         }
         TijerasBTT.setOnClickListener {
             val result = playMachine()
             imgJugador.setImageResource(R.drawable.tijera)
             imgMaquina.setImageResource(getDrawableResource(result))
+            listaAudios[3]?.start()
             determineWinnerRound(result,2)
         }
 
