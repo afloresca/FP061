@@ -1,14 +1,20 @@
 package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.View
+import androidx.compose.animation.core.animate
 import com.example.ppt_kotders.MainActivity
 import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
@@ -159,18 +165,25 @@ class Juego : AppCompatActivity() {
             imgJugador.setImageResource(R.drawable.piedra)
             imgMaquina.setImageResource(getDrawableResource(result))
             determineWinnerRound(result,0)
+
+
         }
         PapelBT.setOnClickListener {
             val result = playMachine()
+
             imgJugador.setImageResource(R.drawable.papel)
             imgMaquina.setImageResource(getDrawableResource(result))
             determineWinnerRound(result,1)
+
+
         }
         TijerasBTT.setOnClickListener {
             val result = playMachine()
             imgJugador.setImageResource(R.drawable.tijera)
             imgMaquina.setImageResource(getDrawableResource(result))
             determineWinnerRound(result,2)
+
+
         }
 
         salir.setOnClickListener {
@@ -178,6 +191,8 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }
+
+
     }
 
 }
