@@ -23,6 +23,8 @@ import io.reactivex.rxjava3.core.Observable
 class Juego : AppCompatActivity() {
     val TAG = "Juego"
 
+    private val opciones = listOf(R.drawable.piedra, R.drawable.papel, R.drawable.tijera)
+    private var animacionEnProgreso = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +60,7 @@ class Juego : AppCompatActivity() {
         var puntm = 0
         var rondasJugadas = 1
         var rondasMaximas = 50
+
 
 
         fun win(): Observable<Unit> {
@@ -130,7 +133,8 @@ class Juego : AppCompatActivity() {
             }
         }
 
-        fun determineWinnerRound(eleccionMaquina: Int, eleccionJugador: Int) {
+        fun determineWinnerRound(eleccionMaquina: Int, eleccionJugador: Int):Int {
+            var res = 0
             if (rondasJugadas <= rondasMaximas){
                 if ((eleccionJugador == 0 && eleccionMaquina == 2) ||
                     (eleccionJugador == 1 && eleccionMaquina == 0) ||
@@ -140,6 +144,7 @@ class Juego : AppCompatActivity() {
                     EstadoTV.text = getString(R.string.tx_victory)
                     puntj++
                     Log.d(TAG, "El jugador ha ganado")
+                    res = 1
                 } else if ((eleccionJugador == 0 && eleccionMaquina == 0) ||
                     (eleccionJugador == 1 && eleccionMaquina == 1) ||
                     (eleccionJugador == 2 && eleccionMaquina == 2)){
@@ -151,39 +156,81 @@ class Juego : AppCompatActivity() {
                     EstadoTV.text = getString(R.string.tx_loose)
                     puntm++
                     Log.d(TAG, "El jugador ha perdido")
+                    res = 2
                 }
 
                 updateCountRound()
                 updateCountPlayers()
                 determineWinner()
                 rondasJugadas++
+
+
             }
+            return res
+        }
+        fun iniciarAnimacion() {
+            animacionEnProgreso = true
+
+            val handler = Handler(Looper.getMainLooper())
+            val delay = 50 // Milisegundos entre cada cambio de imagen
+
+            handler.postDelayed(object : Runnable {
+                override fun run() {
+                    imgMaquina.setImageResource(opciones.random())
+                    if (animacionEnProgreso) {
+                        handler.postDelayed(this, delay.toLong())
+                    }
+                }
+            }, delay.toLong())
+        }
+        fun detenerAnimacion() {
+            animacionEnProgreso = false
+            PiedraBT.isEnabled = false
+            PapelBT.isEnabled = false
+            TijerasBTT.isEnabled = false
+        }
+        fun reiniciar() {
+            Handler(Looper.getMainLooper()).postDelayed({
+                iniciarAnimacion()
+                imgJugador.setImageResource(R.drawable.incognito)
+                EstadoTV.text = ""
+                PiedraBT.isEnabled = true
+                PapelBT.isEnabled = true
+                TijerasBTT.isEnabled = true
+            }, 3000)
+
         }
 
         PiedraBT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.piedra)
             imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinnerRound(result,0)
-
-
+            var res = determineWinnerRound(result,0)
+            reiniciar()
+            }, 100)
         }
         PapelBT.setOnClickListener {
             val result = playMachine()
-
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.papel)
             imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinnerRound(result,1)
-
+            var res =determineWinnerRound(result,1)
+            reiniciar()
+            }, 100)
 
         }
         TijerasBTT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.tijera)
             imgMaquina.setImageResource(getDrawableResource(result))
-            determineWinnerRound(result,2)
-
-
+            var res = determineWinnerRound(result,2)
+            reiniciar()
+            }, 100)
         }
 
         salir.setOnClickListener {
@@ -193,6 +240,8 @@ class Juego : AppCompatActivity() {
         }
 
 
+
+        iniciarAnimacion() // Empieza la magia
     }
 
 }

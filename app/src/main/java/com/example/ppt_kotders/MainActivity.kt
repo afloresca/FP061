@@ -26,7 +26,6 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import com.google.mlkit.vision.text.Text
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
