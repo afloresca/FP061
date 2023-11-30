@@ -4,6 +4,8 @@ import MyDBOpenHelper
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -20,6 +22,8 @@ class Juego : AppCompatActivity() {
     val TAG = "Juego"
     private val notis = Notificacion(this)
     private val timeI = System.currentTimeMillis()
+    private val opciones = listOf(R.drawable.piedra, R.drawable.papel, R.drawable.tijera)
+    private var animacionEnProgreso = false
 
     var listaAudios = arrayOfNulls<MediaPlayer>(size = 6)
 
@@ -168,27 +172,70 @@ class Juego : AppCompatActivity() {
                 rondasJugadas++
             }
         }
+        fun iniciarAnimacion() {
+            animacionEnProgreso = true
+
+            val handler = Handler(Looper.getMainLooper())
+            val delay = 50 // Milisegundos entre cada cambio de imagen
+
+            handler.postDelayed(object : Runnable {
+                override fun run() {
+                    imgMaquina.setImageResource(opciones.random())
+                    if (animacionEnProgreso) {
+                        handler.postDelayed(this, delay.toLong())
+                    }
+                }
+            }, delay.toLong())
+        }
+        fun detenerAnimacion() {
+            animacionEnProgreso = false
+            PiedraBT.isEnabled = false
+            PapelBT.isEnabled = false
+            TijerasBTT.isEnabled = false
+        }
+        fun reiniciar() {
+            Handler(Looper.getMainLooper()).postDelayed({
+                iniciarAnimacion()
+                imgJugador.setImageResource(R.drawable.incognito)
+                EstadoTV.text = ""
+                PiedraBT.isEnabled = true
+                PapelBT.isEnabled = true
+                TijerasBTT.isEnabled = true
+            }, 3000)}
+
 
         PiedraBT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.piedra)
             imgMaquina.setImageResource(getDrawableResource(result))
             listaAudios[1]?.start()
             determineWinnerRound(result,0)
+            reiniciar()
+            }, 100)
         }
         PapelBT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.papel)
             imgMaquina.setImageResource(getDrawableResource(result))
             listaAudios[2]?.start()
             determineWinnerRound(result,1)
+            reiniciar()
+            }, 100)
         }
         TijerasBTT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.tijera)
             imgMaquina.setImageResource(getDrawableResource(result))
             listaAudios[3]?.start()
             determineWinnerRound(result,2)
+                reiniciar()
+            }, 100)
         }
 
         salir.setOnClickListener {
@@ -196,6 +243,8 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }
+
+        iniciarAnimacion() // Empieza la magia
     }
 
 }
