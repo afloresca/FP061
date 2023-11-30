@@ -56,17 +56,8 @@
     <ImageView
         android:id="@+id/logojuego"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="308dp"
         android:src="@drawable/ppt" />
-
-    <Button
-        android:id="@+id/btnsilencio"
-        android:layout_width="63dp"
-        android:layout_height="wrap_content"
-        android:foreground="@drawable/altavoz"
-        android:text="Silenciar"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="10sp" />
 
     <Button
         android:id="@+id/btjugar"
@@ -119,6 +110,18 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:src="@drawable/image_photoroom_png_photoroom" />
+
+        <Button
+            android:id="@+id/btnsilencio"
+            android:layout_width="63dp"
+            android:layout_height="wrap_content"
+            android:foreground="@drawable/altavoz"
+            android:background="@color/white"
+            android:text="Silenciar"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="10sp"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="15dp"/>
     </LinearLayout>
 
 
