@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
@@ -39,7 +40,8 @@ class MainActivity : ComponentActivity() {
         val loginbt = findViewById<Button>(R.id.btlog)
         val inserttxt = findViewById<EditText>(R.id.editTextText2)
         val textview = findViewById<TextView>(R.id.textView8)
-
+        val btcambio = findViewById<Button>(R.id.button2)
+        val btcambio2 = findViewById<Button>(R.id.button1)
         val myDBOpenHelper = MyDBOpenHelper(this, null)
 
         // Se introduce el texto
@@ -67,6 +69,23 @@ class MainActivity : ComponentActivity() {
 
 
         }
+        btcambio.setOnClickListener() {
+
+            cambiolang("en_US")
+            val refresh = Intent(this, MainActivity::class.java)
+            startActivity(refresh)
+            finish()
+
+
+        }
+
+        btcambio2.setOnClickListener(){
+            cambiolang("es")
+            val refresh = Intent(this, MainActivity::class.java)
+            startActivity(refresh)
+            finish()
+        }
+
     }
 
     private fun verificarPermisos() {
@@ -162,6 +181,17 @@ class MainActivity : ComponentActivity() {
                 onPermisosConcedidos()
             }
         }
+
+    }
+
+    private fun cambiolang(lang:String){
+        val myLocale = Locale(lang)
+        val res = resources
+        val dm = res.displayMetrics
+        val conf = res.configuration
+        conf.locale = myLocale
+        res.updateConfiguration(conf, dm)
+
     }
 }
 
