@@ -2,6 +2,7 @@ package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -23,7 +24,9 @@ class Menu : AppCompatActivity() {
         val ayudaBt = findViewById<Button>(R.id.btayuda)
         val nombre = findViewById<TextView>(R.id.textNombre)
         val puntos = findViewById<TextView>(R.id.textPuntos)
-
+        val silencioBt = findViewById<Button>(R.id.btnsilencio)
+        var listas = arrayOfNulls<MediaPlayer>(size = 1)
+        listas[0] = MediaPlayer.create(this, R.raw.stranger)
         val MyDBOpenHelper = MyDBOpenHelper(this, null)
         var idUser = UserSingelton.id
 
@@ -58,17 +61,26 @@ class Menu : AppCompatActivity() {
 
         }
 
-        ayudaBt.setOnClickListener{
-            val intent = Intent(this, ayuda::class.java)
-            startActivity(intent)
-            finish()
+        silencioBt.setOnClickListener {
+            val intent = Intent(this, Menu::class.java)
+            if (!(listas[0]?.isPlaying == true)) {
+                listas[0]?.start()
+            } else {
+                listas[0]?.pause()
+            }
         }
 
-        historicoBt.setOnClickListener {
-            val intent = Intent(this, Historico::class.java)
-            startActivity(intent)
-            finish()
+            ayudaBt.setOnClickListener {
+                val intent = Intent(this, ayuda::class.java)
+                startActivity(intent)
+                finish()
+            }
 
+            historicoBt.setOnClickListener {
+                val intent = Intent(this, Historico::class.java)
+                startActivity(intent)
+                finish()
+
+            }
         }
     }
-}

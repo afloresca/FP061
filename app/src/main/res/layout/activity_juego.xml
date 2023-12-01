@@ -73,7 +73,7 @@
             android:layout_height="150dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="20dp"
-            android:src="@drawable/incognito" />
+             />
 
         <ImageView
             android:id="@+id/imgjugador"
@@ -199,7 +199,10 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/tijera2" />
 
+
+
         </LinearLayout>
+
 
 
 

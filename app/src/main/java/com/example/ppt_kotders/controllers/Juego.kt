@@ -1,9 +1,15 @@
 package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.os.Looper
 import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import androidx.compose.animation.core.animate
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -21,11 +27,16 @@ class Juego : AppCompatActivity() {
     private val notis = Notificacion(this)
     private val timeI = System.currentTimeMillis()
 
+    val opciones = listOf(R.drawable.piedra, R.drawable.papel, R.drawable.tijera)
+    var animacionEnProgreso = false
+
     var listaAudios = arrayOfNulls<MediaPlayer>(size = 6)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_juego)
+
+
         listaAudios[0]= MediaPlayer.create(this,R.raw.stranger)
         listaAudios[1]= MediaPlayer.create(this,R.raw.piedra)
         listaAudios[2]= MediaPlayer.create(this,R.raw.pagina)
@@ -65,6 +76,25 @@ class Juego : AppCompatActivity() {
         var puntm = 0
         var rondasJugadas = 1
         var rondasMaximas = 50
+
+        //animación
+        //var ad = AnimationDrawable()
+
+        //var imagen1 = resources.getDrawable(R.drawable.piedra, theme)
+        //var imagen2 = resources.getDrawable(R.drawable.papel, theme)
+        //var imagen3 = resources.getDrawable(R.drawable.tijera, theme)
+        //var imagen4 = resources.getDrawable(R.drawable.incognito, theme)
+
+        //ad.addFrame(imagen1,100)
+        //ad.addFrame(imagen2, 100)
+        //ad.addFrame(imagen3, 100)
+        //ad.addFrame(imagen4, 100)
+
+        //var estado =0
+
+        //imgMaquina.background = ad
+        //ad.start()
+
 
 
         fun win(): Observable<Unit> {
@@ -132,7 +162,7 @@ class Juego : AppCompatActivity() {
         fun getDrawableResource(result: Int) : Int {
             Log.d("$TAG", "Se ha actualizado la elección del gesto")
             return when (result) {
-                0 -> R.drawable.piedra
+                0->  R.drawable.piedra
                 1 -> R.drawable.papel
                 2 -> R.drawable.tijera
                 else -> R.drawable.incognito
@@ -141,9 +171,11 @@ class Juego : AppCompatActivity() {
 
         fun determineWinnerRound(eleccionMaquina: Int, eleccionJugador: Int) {
             if (rondasJugadas <= rondasMaximas){
+
                 if ((eleccionJugador == 0 && eleccionMaquina == 2) ||
                     (eleccionJugador == 1 && eleccionMaquina == 0) ||
                     (eleccionJugador == 2 && eleccionMaquina == 1)
+
                 ) {
                     // Si gana el jugador
                     EstadoTV.text = getString(R.string.tx_victory)
@@ -169,26 +201,78 @@ class Juego : AppCompatActivity() {
             }
         }
 
+        fun iniciarAnimmacion() {
+            animacionEnProgreso = true
+            val handler = Handler(Looper.getMainLooper())
+            val delay = 50 // Milisegundos entre cada cambio de imagen
+
+            handler.postDelayed(object : Runnable {
+                override fun run() {
+                    imgMaquina.setImageResource(opciones.random())
+                    if (animacionEnProgreso) {
+                        handler.postDelayed(this, delay.toLong())
+                    }
+                }
+            }, delay.toLong())
+        }
+
+
+
+        fun detenerAnimacion() {
+            animacionEnProgreso = false
+            PiedraBT.isEnabled = false
+            PapelBT.isEnabled = false
+            TijerasBTT.isEnabled = false
+        }
+
+        fun reiniciar() {
+            Handler(Looper.getMainLooper()).postDelayed({
+                iniciarAnimmacion()
+
+                imgJugador.setImageResource(R.drawable.incognito)
+                EstadoTV.text = ""
+                PiedraBT.isEnabled = true
+                PapelBT.isEnabled = true
+                TijerasBTT.isEnabled = true
+            }, 3000)
+
+        }
+
         PiedraBT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.piedra)
-            imgMaquina.setImageResource(getDrawableResource(result))
             listaAudios[1]?.start()
-            determineWinnerRound(result,0)
-        }
+            imgMaquina.setImageResource(getDrawableResource(result))
+            var res = determineWinnerRound(result,0)
+            reiniciar()
+        }, 100)
+    }
         PapelBT.setOnClickListener {
             val result = playMachine()
-            imgJugador.setImageResource(R.drawable.papel)
-            imgMaquina.setImageResource(getDrawableResource(result))
-            listaAudios[2]?.start()
-            determineWinnerRound(result,1)
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
+                imgJugador.setImageResource(R.drawable.papel)
+                //ad.start()
+                imgMaquina.setImageResource(getDrawableResource(result))
+                listaAudios[2]?.start()
+                var res = determineWinnerRound(result, 1)
+                reiniciar()
+            }, 100)
         }
+
         TijerasBTT.setOnClickListener {
             val result = playMachine()
-            imgJugador.setImageResource(R.drawable.tijera)
-            imgMaquina.setImageResource(getDrawableResource(result))
-            listaAudios[3]?.start()
-            determineWinnerRound(result,2)
+            //ad.start()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
+                imgJugador.setImageResource(R.drawable.tijera)
+                imgMaquina.setImageResource(getDrawableResource(result))
+                listaAudios[3]?.start()
+                var res = determineWinnerRound(result, 2)
+                reiniciar()
+            }, 100)
         }
 
         salir.setOnClickListener {
@@ -196,6 +280,12 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }
+
+        iniciarAnimmacion()
+
+
     }
+
+
 
 }
