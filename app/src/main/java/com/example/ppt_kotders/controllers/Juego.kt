@@ -2,7 +2,10 @@ package com.example.ppt_kotders.controllers
 
 import MyDBOpenHelper
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -10,20 +13,34 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import com.example.ppt_kotders.MainActivity
+import com.example.ppt_kotders.Notificacion
 import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
 import io.reactivex.rxjava3.core.Observable
 
 class Juego : AppCompatActivity() {
     val TAG = "Juego"
+    private val notis = Notificacion(this)
+    private val timeI = System.currentTimeMillis()
+    private val opciones = listOf(R.drawable.piedra, R.drawable.papel, R.drawable.tijera)
+    private var animacionEnProgreso = false
 
+    var listaAudios = arrayOfNulls<MediaPlayer>(size = 6)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_juego)
-
+        listaAudios[0]= MediaPlayer.create(this,R.raw.stranger)
+        listaAudios[1]= MediaPlayer.create(this,R.raw.piedra)
+        listaAudios[2]= MediaPlayer.create(this,R.raw.pagina)
+        listaAudios[3]= MediaPlayer.create(this,R.raw.tijeras)
+        listaAudios[4]= MediaPlayer.create(this,R.raw.fireworks)
+        listaAudios[5]= MediaPlayer.create(this,R.raw.trueno)
+        listaAudios[0]?.pause()
         val MyDBOpenHelper = MyDBOpenHelper(this,null)
         val idUser = UserSingelton.id
+
+        notis.createChannel()
 
         if(idUser == -1){ // LogOut de seguridad
             val intent = Intent(this, MainActivity::class.java)
@@ -64,6 +81,8 @@ class Juego : AppCompatActivity() {
                     val intent = Intent(this, SolucionJuego::class.java)
                     intent.putExtra("Resultado", 1)
                     intent.putExtra("Jugador_ID", idUser)
+                    val tiempoResultado = (System.currentTimeMillis() - timeI) / 1000
+                    notis.createSimpleNotification(tiempoResultado.toInt())
                     startActivity(intent)
                 }
         }
@@ -89,7 +108,7 @@ class Juego : AppCompatActivity() {
                         win().subscribe()
                     }
                     puntm == 3 -> {
-                        UserSingelton.estado = 1
+                        UserSingelton.estado = 2
                         lose().subscribe()
                     }
                 }
@@ -131,18 +150,18 @@ class Juego : AppCompatActivity() {
                     (eleccionJugador == 2 && eleccionMaquina == 1)
                 ) {
                     // Si gana el jugador
-                    EstadoTV.text = "VICTORIA"
+                    EstadoTV.text = getString(R.string.tx_victory)
                     puntj++
                     Log.d(TAG, "El jugador ha ganado")
                 } else if ((eleccionJugador == 0 && eleccionMaquina == 0) ||
                     (eleccionJugador == 1 && eleccionMaquina == 1) ||
                     (eleccionJugador == 2 && eleccionMaquina == 2)){
                     // Si empata el jugador
-                    EstadoTV.text = "EMPATE"
+                    EstadoTV.text = getString(R.string.tx_pair)
                     Log.d(TAG, "El juego ha quedado en empate")
                 } else {
                     // Si pierde el jugador
-                    EstadoTV.text = "DERROTA"
+                    EstadoTV.text = getString(R.string.tx_loose)
                     puntm++
                     Log.d(TAG, "El jugador ha perdido")
                 }
@@ -153,24 +172,70 @@ class Juego : AppCompatActivity() {
                 rondasJugadas++
             }
         }
+        fun iniciarAnimacion() {
+            animacionEnProgreso = true
+
+            val handler = Handler(Looper.getMainLooper())
+            val delay = 50 // Milisegundos entre cada cambio de imagen
+
+            handler.postDelayed(object : Runnable {
+                override fun run() {
+                    imgMaquina.setImageResource(opciones.random())
+                    if (animacionEnProgreso) {
+                        handler.postDelayed(this, delay.toLong())
+                    }
+                }
+            }, delay.toLong())
+        }
+        fun detenerAnimacion() {
+            animacionEnProgreso = false
+            PiedraBT.isEnabled = false
+            PapelBT.isEnabled = false
+            TijerasBTT.isEnabled = false
+        }
+        fun reiniciar() {
+            Handler(Looper.getMainLooper()).postDelayed({
+                iniciarAnimacion()
+                imgJugador.setImageResource(R.drawable.incognito)
+                EstadoTV.text = ""
+                PiedraBT.isEnabled = true
+                PapelBT.isEnabled = true
+                TijerasBTT.isEnabled = true
+            }, 3000)}
+
 
         PiedraBT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.piedra)
             imgMaquina.setImageResource(getDrawableResource(result))
+            listaAudios[1]?.start()
             determineWinnerRound(result,0)
+            reiniciar()
+            }, 100)
         }
         PapelBT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.papel)
             imgMaquina.setImageResource(getDrawableResource(result))
+            listaAudios[2]?.start()
             determineWinnerRound(result,1)
+            reiniciar()
+            }, 100)
         }
         TijerasBTT.setOnClickListener {
             val result = playMachine()
+            detenerAnimacion()
+            Handler(Looper.getMainLooper()).postDelayed({
             imgJugador.setImageResource(R.drawable.tijera)
             imgMaquina.setImageResource(getDrawableResource(result))
+            listaAudios[3]?.start()
             determineWinnerRound(result,2)
+                reiniciar()
+            }, 100)
         }
 
         salir.setOnClickListener {
@@ -178,6 +243,8 @@ class Juego : AppCompatActivity() {
             intent.putExtra("Jugador_ID",idUser)
             startActivity(intent)
         }
+
+        iniciarAnimacion() // Empieza la magia
     }
 
 }

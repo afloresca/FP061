@@ -38,7 +38,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/buttonScreenshot"
+            android:id="@+id/buttonSaveGame"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -57,11 +57,10 @@
             android:layout_gravity="center"
             android:backgroundTint="#FFC107"
             android:fontFamily="@font/annie_use_your_telescope"
-            android:text="Continuar"
+            android:text="@string/bt_continue"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/black"
-            android:textSize="42sp" />
-
+            android:textSize="48sp" />
 
         <ImageView
             android:id="@+id/imageView5"

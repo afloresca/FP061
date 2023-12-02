@@ -1,18 +1,17 @@
 package com.example.ppt_kotders.controllers
 
 import android.Manifest
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -26,12 +25,11 @@ import com.example.ppt_kotders.UserSingelton
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
-import android.net.Uri
-import android.view.View
 import java.util.TimeZone
 
-
 class SolucionJuego : AppCompatActivity() {
+
+    var lista = arrayOfNulls<MediaPlayer>(size = 2)
 
     private val CALENDAR_WRITE_PERMISSION_REQUEST_CODE = 101
     private val CALENDAR_READ_PERMISSION_REQUEST_CODE = 102
@@ -40,10 +38,13 @@ class SolucionJuego : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solucion)
 
+        lista[0]=MediaPlayer.create(this,R.raw.fireworks)
+        lista[1]=MediaPlayer.create(this,R.raw.trueno)
+
         val idUser = UserSingelton.id
         val condicion = UserSingelton.estado
         val buttonD = findViewById<Button>(R.id.buttonD)
-        val buttonScreenshot = findViewById<Button>(R.id.buttonScreenshot)
+        val buttonSave = findViewById<Button>(R.id.buttonSaveGame)
         val imagen = findViewById<ImageView>(R.id.imageView)
         val texto = findViewById<TextView>(R.id.textView3)
         val textodata = findViewById<TextView>(R.id.textView)
@@ -55,25 +56,32 @@ class SolucionJuego : AppCompatActivity() {
         }
 
         when (condicion) {
+
             1 -> {
                 imagen.setImageResource(R.drawable.ppt)
-                texto.text = " VICTORIA "
-                buttonScreenshot.visibility = android.view.View.VISIBLE
+                texto.text = getString(R.string.tx_victory)
+                lista[0]?.start()
+                buttonSave.visibility = android.view.View.VISIBLE
             }
 
             2 -> {
                 imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
-                texto.text = " DERROTA "
+                texto.text = getString(R.string.tx_loose)
+                lista[1]?.start()
             }
 
             0 -> logout() // Por defecto -> error del juego
         }
 
-        buttonD.setOnClickListener {
+        buttonD.setOnClickListener() {
+
             val intent = Intent(this, Menu::class.java)
             UserSingelton.estado = 0 // Lo ponemos por defecto
+            lista[0]?.stop()
+            lista[1]?.stop()
             startActivity(intent)
             finish()
+
         }
 
         // Función para guardar la captura en la galeria de imagenes
@@ -210,20 +218,23 @@ class SolucionJuego : AppCompatActivity() {
         }
 
 
-        buttonScreenshot.setOnClickListener {
+        buttonSave.setOnClickListener {
             takeScreenshot()
             insertEventToCalendar()
         }
-
     }
 
-    private fun logout() {
+    fun logout(){ // Detecta el estado default y rectifica el error logout
         val intent = Intent(this, MainActivity::class.java)
         UserSingelton.id = 0
         UserSingelton.estado = 0
         startActivity(intent)
         finish()
+
     }
+
 }
+
+
 
 
