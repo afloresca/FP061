@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.BounceInterpolator
+import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.TextView
@@ -94,7 +95,7 @@ class Menu : AppCompatActivity() {
         }
 
         ayudaBt.setOnClickListener{
-            val intent = Intent(this, Ayuda::class.java)
+            val intent = Intent(this, ayuda::class.java)
             startActivity(intent)
             finish()
         }
