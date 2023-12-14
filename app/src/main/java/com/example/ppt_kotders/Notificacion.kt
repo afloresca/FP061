@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.ppt_kotders.controllers.NotiVictoria
+import com.example.ppt_kotders.controllers.NotificacionVictoria
 
 
 class Notificacion (context: Context) {
@@ -36,7 +36,7 @@ class Notificacion (context: Context) {
     @SuppressLint("MissingPermission")
     fun createSimpleNotification(tiempoResultado : Int){
 
-        val intent = Intent(app, NotiVictoria::class.java).apply{
+        val intent = Intent(app, NotificacionVictoria::class.java).apply{
             var flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
