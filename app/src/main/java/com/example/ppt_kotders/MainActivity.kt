@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.ppt_kotders.controllers.LoginActivity
@@ -122,8 +121,8 @@ class MainActivity : ComponentActivity() {
                     val user = mAuth.currentUser
                     user?.let {
                         // Guardar la información del usuario en SavedPreferencesUser
-                        SavedPreferencesUser.setEmail(this, it.email ?: "")
-                        SavedPreferencesUser.setUsername(this, it.displayName ?: "")
+                        UserSingelton.setEmail(this, it.email ?: "")
+                        UserSingelton.setUsername(this, it.displayName ?: "")
                     }
                     updateUI(user)
 

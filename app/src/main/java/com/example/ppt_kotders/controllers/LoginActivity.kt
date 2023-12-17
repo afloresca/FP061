@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.example.ppt_kotders.R
-import com.example.ppt_kotders.SavedPreferencesUser
 import com.example.ppt_kotders.UserSingelton
 
 class LoginActivity : AppCompatActivity() {
@@ -22,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
         val myDBOpenHelper = MyDBOpenHelper(this, null)
 
         // Obtener el nombre del objeto SavedPreferences
-        val savedUsername = SavedPreferencesUser.getUsername(this)
+        val savedUsername = UserSingelton.getUsername(this)
 
         // Mostrar el nombre en el EditText
         inserttxt.setText(savedUsername)
