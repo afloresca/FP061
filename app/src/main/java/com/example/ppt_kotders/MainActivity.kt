@@ -18,10 +18,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
 import com.example.ppt_kotders.controllers.Menu
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,9 +32,8 @@ import com.google.android.gms.location.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import java.util.Locale
+
 
 class MainActivity : ComponentActivity() {
 
@@ -48,12 +45,15 @@ class MainActivity : ComponentActivity() {
     private val CODE_GOOGLE_SIGN_IN = 2
     private lateinit var mAuth: FirebaseAuth
 
+    private lateinit var textview: TextView
+    private lateinit var myDBOpenHelper: MyDBOpenHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        verificarPermisos()
+
 
         val loginbt = findViewById<Button>(R.id.btlog)
         val inserttxt = findViewById<EditText>(R.id.editTextText2)
@@ -141,20 +141,25 @@ class MainActivity : ComponentActivity() {
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                Log.w(TAG, "Google sign in failed", e)
+                Toast.makeText(this,"Login Failed", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
+    private fun firebaseAuthWithGoogle(idToken:String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
+
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
+                    Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                     val user = mAuth.currentUser
                     updateUI(user)
+
+                    // Obtener el nombre de usuario de Google
+                    val nombreUsuario = user?.displayName ?: ""
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -163,104 +168,50 @@ class MainActivity : ComponentActivity() {
             }
     }
 
-    private fun updateUI(user: FirebaseUser?) {
+    private fun saveUsernameToLocalDB(nombreUsuario: String) {
+        if (nombreUsuario.isNotEmpty()) {
+            // Verificar si el usuario ya existe en la base de datos local
+            var id = myDBOpenHelper.getUserID(nombreUsuario)
+
+            if (id == 0) {
+                // Si no existe, agregar el usuario a la base de datos local
+                myDBOpenHelper.addPlayer(nombreUsuario, 0)
+            }
+            id = myDBOpenHelper.getUserID(nombreUsuario)
+            val intent = Intent(this, Menu::class.java)
+
+            // Establecer información en el Singleton o donde lo necesites
+            UserSingelton.id = id
+            startActivity(intent)
+
+        }
     }
 
-    private fun verificarPermisos() {
-        val permisos = arrayListOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.POST_NOTIFICATIONS
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            permisos.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        }
-
-        val permisosArray = permisos.toTypedArray()
-        if (tienePermisos(permisosArray)){
-            isPermisos = true
-            onPermisosConcedidos()
+    private fun loginWithLocalPlayer(nombreplayer: String) {
+        if (nombreplayer == "") {
+            textview.text = getString(R.string.not_valid)
         } else {
-            solicitarPermisos(permisosArray)
-        }
+            var id = myDBOpenHelper.getUserID(nombreplayer)
 
-    }
-
-    private fun tienePermisos(permisos: Array<String>): Boolean{
-        return permisos.all{
-            return ContextCompat.checkSelfPermission(
-                this,
-                it
-            ) == PackageManager.PERMISSION_GRANTED
-        }
-    }
-
-    private fun onPermisosConcedidos() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        try{
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                if (it != null){
-                    obtenerUbicacion(it)
-                } else {
-                    Toast.makeText(this, "No se puede obtener la ubicación", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-            val locationRequest = LocationRequest.Builder(
-                Priority.PRIORITY_HIGH_ACCURACY,
-                30000
-            ).apply {
-                setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
-                setWaitForAccurateLocation(true)
-            }.build()
-
-            locationCallback = object  :  LocationCallback() {
-                override fun onLocationResult(p0 : LocationResult) {
-                    super.onLocationResult(p0)
-                    for (location in p0.locations) {
-                        obtenerUbicacion(location)
-                    }
-                }
+            if (id == 0) {
+                // Si no existe el jugador, crea uno nuevo
+                myDBOpenHelper.addPlayer(nombreplayer, 0)
             }
 
-            fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
-        } catch (_: SecurityException){
+            id = myDBOpenHelper.getUserID(nombreplayer)
+            val intent = Intent(this, Menu::class.java)
 
+            // Establecer información en el Singleton o donde lo necesites
+            UserSingelton.id = id
+            startActivity(intent)
         }
     }
 
-    private fun solicitarPermisos(permisos: Array<String>){
-        requestPermissions(
-            permisos,
-            CODIGO_PERMISO_SEGUNDO_PLANO
-        )
-    }
-
-    private fun obtenerUbicacion(ubicacion: Location){
-        Ubicacion.setLatitud(ubicacion.latitude)
-        Ubicacion.setLontigud(ubicacion.longitude)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == CODIGO_PERMISO_SEGUNDO_PLANO){
-            val todosPermisosConcedidos = grantResults.all { it == PackageManager.PERMISSION_GRANTED  }
-            if (grantResults.isNotEmpty() && todosPermisosConcedidos) {
-                isPermisos = true
-                onPermisosConcedidos()
-            }
-        }
+    private fun updateUI(user: FirebaseUser?) {
 
     }
+
+
 
     private fun cambiolang(lang:String){
         val myLocale = Locale(lang)
