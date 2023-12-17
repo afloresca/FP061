@@ -1,34 +1,21 @@
 package com.example.ppt_kotders
 
 import MyDBOpenHelper
-import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.os.Build
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.core.content.ContextCompat
-import com.example.ppt_kotders.controllers.Menu
+import com.example.ppt_kotders.controllers.LoginActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -45,19 +32,12 @@ class MainActivity : ComponentActivity() {
     private val CODE_GOOGLE_SIGN_IN = 2
     private lateinit var mAuth: FirebaseAuth
 
-    private lateinit var textview: TextView
-    private lateinit var myDBOpenHelper: MyDBOpenHelper
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-
-        val loginbt = findViewById<Button>(R.id.btlog)
-        val inserttxt = findViewById<EditText>(R.id.editTextText2)
-        val textview = findViewById<TextView>(R.id.textView8)
         val btcambio = findViewById<Button>(R.id.button2)
         val btcambio2 = findViewById<Button>(R.id.button1)
         val myDBOpenHelper = MyDBOpenHelper(this, null)
@@ -65,42 +45,15 @@ class MainActivity : ComponentActivity() {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance()
 
-        // Se introduce el texto
-
-        loginbt.setOnClickListener() {
-
-            var nombreplayer = inserttxt.text.toString()
-
-            if (nombreplayer == "") {
-                textview.text = getString(R.string.not_valid)
-            } else {
-                var id = myDBOpenHelper.getUserID(nombreplayer)
-
-                if (id == 0) { // Si existe el 1er jug guarda el id y accede automatico
-                    myDBOpenHelper.addPlayer(nombreplayer, 0)
-                    // Establecer filtro login
-                }
-
-                id = myDBOpenHelper.getUserID(nombreplayer)
-                val intent = Intent(this, Menu::class.java)
-
-                UserSingelton.id = id
-                startActivity(intent)
-            }
-
-
-        }
         btcambio.setOnClickListener() {
 
             cambiolang("en_US")
             val refresh = Intent(this, MainActivity::class.java)
             startActivity(refresh)
             finish()
-
-
         }
 
-        btcambio2.setOnClickListener(){
+        btcambio2.setOnClickListener() {
             cambiolang("es")
             val refresh = Intent(this, MainActivity::class.java)
             startActivity(refresh)
@@ -108,11 +61,22 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Cerrar sesión al inicio de la aplicación
+        mAuth.signOut()
+
+        // Pide al usuario que inicie sesión
         val currentUser = mAuth.currentUser
-        updateUI(currentUser)
+        if (currentUser == null) {
+            // El usuario no ha iniciado sesión, realiza las acciones necesarias (por ejemplo, muestra la pantalla de inicio de sesión)
+            // ...
+
+        } else {
+            // El usuario ya ha iniciado sesión, puedes realizar acciones adicionales si es necesario
+            updateUI(currentUser)
+        }
     }
 
     fun callSignInGoogle (view: View){
@@ -156,6 +120,11 @@ class MainActivity : ComponentActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                     val user = mAuth.currentUser
+                    user?.let {
+                        // Guardar la información del usuario en SavedPreferencesUser
+                        SavedPreferencesUser.setEmail(this, it.email ?: "")
+                        SavedPreferencesUser.setUsername(this, it.displayName ?: "")
+                    }
                     updateUI(user)
 
                     // Obtener el nombre de usuario de Google
@@ -168,47 +137,16 @@ class MainActivity : ComponentActivity() {
             }
     }
 
-    private fun saveUsernameToLocalDB(nombreUsuario: String) {
-        if (nombreUsuario.isNotEmpty()) {
-            // Verificar si el usuario ya existe en la base de datos local
-            var id = myDBOpenHelper.getUserID(nombreUsuario)
-
-            if (id == 0) {
-                // Si no existe, agregar el usuario a la base de datos local
-                myDBOpenHelper.addPlayer(nombreUsuario, 0)
-            }
-            id = myDBOpenHelper.getUserID(nombreUsuario)
-            val intent = Intent(this, Menu::class.java)
-
-            // Establecer información en el Singleton o donde lo necesites
-            UserSingelton.id = id
-            startActivity(intent)
-
-        }
-    }
-
-    private fun loginWithLocalPlayer(nombreplayer: String) {
-        if (nombreplayer == "") {
-            textview.text = getString(R.string.not_valid)
-        } else {
-            var id = myDBOpenHelper.getUserID(nombreplayer)
-
-            if (id == 0) {
-                // Si no existe el jugador, crea uno nuevo
-                myDBOpenHelper.addPlayer(nombreplayer, 0)
-            }
-
-            id = myDBOpenHelper.getUserID(nombreplayer)
-            val intent = Intent(this, Menu::class.java)
-
-            // Establecer información en el Singleton o donde lo necesites
-            UserSingelton.id = id
-            startActivity(intent)
-        }
-    }
 
     private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            val userName = user.displayName
+            Toast.makeText(this, "¡Hola, $userName!", Toast.LENGTH_SHORT).show()
 
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()  // Opcional: cierra la actividad actual si ya no es necesaria
+        }
     }
 
 
