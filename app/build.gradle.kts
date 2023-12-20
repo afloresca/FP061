@@ -69,6 +69,12 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxjava:3.1.5")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
+    // Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+
+    //Mochi
+    implementation ("com.squareup.retrofit2:converter-moshi:2.4.0")
+
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:29.2.0"))
 
@@ -81,6 +87,7 @@ dependencies {
 
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
