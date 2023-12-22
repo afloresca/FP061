@@ -23,6 +23,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
         val TABLE_JUGADORES = "JUGADORES"
         val COLUMN_ID = "id"
         val COLUMN_NOMBRE = "nombre"
+        val COLUMN_EMAIL = "email"
         val COLUMN_PUNTOS = "puntos"
 
         val TABLE_PARTIDAS = "PARTIDAS"
@@ -41,6 +42,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
             val createTableJugadores = "CREATE TABLE $TABLE_JUGADORES " +
                     "($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_NOMBRE VARCHAR(60), " +
+                    "$COLUMN_EMAIL VARCHAR(60), " +
                     "$COLUMN_PUNTOS INTEGER DEFAULT 0)"
             db!!.execSQL(createTableJugadores)
 
@@ -70,11 +72,13 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
     }
 
     // Agrega un nuevo jugador a la BD
-    fun addPlayer(nombre: String, puntos: Int) {
+    fun addPlayer(nombre: String, email: String ,puntos: Int) {
         // Se crea un ArrayMap<>() haciendo uso de ContentValues()
         val data = ContentValues()
         data.put(COLUMN_NOMBRE, nombre)
+        data.put(COLUMN_NOMBRE, email)
         data.put(COLUMN_PUNTOS, puntos)
+
 
         // Se abre la BD en modo escritura
         val db = this.writableDatabase
@@ -160,7 +164,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
             try {
                 var jugadorModelo: JugadorModelo? = null
                 val db = this.readableDatabase
-                val columnas = arrayOf(COLUMN_ID, COLUMN_NOMBRE, COLUMN_PUNTOS)
+                val columnas = arrayOf(COLUMN_ID, COLUMN_NOMBRE, COLUMN_EMAIL,COLUMN_PUNTOS)
                 val condicion = "$COLUMN_ID = ?"
                 val valoresCondicion = arrayOf(playerId.toString())
                 val cursor = db.query(TABLE_JUGADORES, columnas, condicion, valoresCondicion, null, null, null)
@@ -168,13 +172,15 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
                 if (cursor.moveToFirst()) {
                     val columnIndex = cursor.getColumnIndex(COLUMN_ID)
                     val nameIndex = cursor.getColumnIndex(COLUMN_NOMBRE)
+                    val emailIndex =cursor.getColumnIndex(COLUMN_EMAIL)
                     val puntosIndex = cursor.getColumnIndex(COLUMN_PUNTOS)
 
                     if (columnIndex != -1) {
                         val id = cursor.getInt(columnIndex)
                         val nombre = cursor.getString(nameIndex)
+                        val email = cursor.getString(emailIndex)
                         val puntos = cursor.getInt(puntosIndex)
-                        jugadorModelo = JugadorModelo(id, nombre, puntos)
+                        jugadorModelo = JugadorModelo(id, nombre,email, puntos)
 
                         cursor.close()
                         db.close()
@@ -186,7 +192,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
                 cursor.close()
                 db.close()
 
-                jugadorModelo = JugadorModelo(0, "", 0)
+                jugadorModelo = JugadorModelo(0, "", "",0)
                 emitter.onNext(jugadorModelo)
                 emitter.onComplete()
             } catch (e: Exception) {

@@ -119,6 +119,7 @@ class MainActivity : ComponentActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                     val user = mAuth.currentUser
+                    Log.i("myApp",user.toString())
                     user?.let {
                         // Guardar la información del usuario en SavedPreferencesUser
                         UserSingelton.setEmail(this, it.email ?: "")

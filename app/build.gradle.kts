@@ -73,7 +73,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
 
     //Mochi
-    implementation ("com.squareup.retrofit2:converter-moshi:2.4.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:29.2.0"))
@@ -88,6 +88,7 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
