@@ -2,6 +2,7 @@ package com.example.ppt_kotders.controllers
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -12,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,6 +24,12 @@ import androidx.core.content.ContextCompat
 import com.example.ppt_kotders.MainActivity
 import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
+import com.example.ppt_kotders.models.User
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.database.ValueEventListener
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -33,6 +41,10 @@ class SolucionJuego : AppCompatActivity() {
 
     private val CALENDAR_WRITE_PERMISSION_REQUEST_CODE = 101
     private val CALENDAR_READ_PERMISSION_REQUEST_CODE = 102
+
+    private val myDBFirebase = FirebaseDatabase
+        .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
+        .reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +67,68 @@ class SolucionJuego : AppCompatActivity() {
             startActivity(intent)
         }
 
+        fun updateDataRealtimeDB(email: String, nombre: String, nuevosPuntos: Int, nuevasVictorias: Int) {
+            val userUID = UserSingelton.getUID()
+            val dbReference = myDBFirebase.child("usuarios").child(userUID)
+
+            // Crear un mapa para actualizar solo puntos y victorias
+            val userUpdate = HashMap<String, Any>()
+            userUpdate["email"] = email
+            userUpdate["nombre"] = nombre
+            userUpdate["puntos"] = nuevosPuntos
+            userUpdate["victorias"] = nuevasVictorias
+
+            // Actualizar la base de datos con el nuevo mapa
+            dbReference.updateChildren(userUpdate)
+                .addOnSuccessListener {
+                    Log.d("updateDataRealtimeDB", "Datos actualizados exitosamente.")
+                }
+                .addOnFailureListener {
+                    Log.e("updateDataRealtimeDB", "Error al actualizar datos.", it)
+                }
+        }
+
+        fun changeUserDataRealtimeDB(user: User?) {
+            if (user != null) {
+                val nombre = user.nombre
+                val email = user.email
+                val puntosActuales = user.puntos ?: 0
+                val victoriasActuales = user.victorias ?: 0
+
+
+                val nuevosPuntos = puntosActuales + 1
+                val nuevasVictorias = victoriasActuales + 1
+
+                // Actualizar solo los campos de puntos y victorias en la base de datos
+                updateDataRealtimeDB(email!!, nombre!!, nuevosPuntos, nuevasVictorias)
+            }
+        }
+
+        fun readUserDataFromRealtimeDB() {
+            val userUID = UserSingelton.getUID()
+            val dbReference = myDBFirebase.child("usuarios")
+
+            // Buscar al usuario por su UID en la base de datos en tiempo real
+            dbReference.child(userUID).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("onCancelled", "Error!", error.toException())
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        // El usuario existe en la base de datos
+                        val user = snapshot.getValue(User::class.java)
+
+                        // Lógica para procesar los datos leídos (si es necesario)
+                        changeUserDataRealtimeDB(user)
+                    } else {
+                        Log.e("onDataChange", "Usuario no encontrado en la base de datos.")
+                        // Puedes manejar el caso en que el usuario no se encuentre en la base de datos.
+                    }
+                }
+            })
+        }
+
         when (condicion) {
 
             1 -> {
@@ -62,6 +136,7 @@ class SolucionJuego : AppCompatActivity() {
                 texto.text = getString(R.string.tx_victory)
                 lista[0]?.start()
                 buttonSave.visibility = android.view.View.VISIBLE
+                readUserDataFromRealtimeDB()
             }
 
             2 -> {

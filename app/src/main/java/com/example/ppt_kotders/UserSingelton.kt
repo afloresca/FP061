@@ -7,6 +7,7 @@ import java.util.Locale
 
 object UserSingelton {
     var id : Int = 0
+    var uid : String = ""
     var estado = 0
     var EMAIL= "email"
     var USERNAME="username"
@@ -45,5 +46,13 @@ object UserSingelton {
     fun getUsername(context: Context) = getSharedPreference(
         context
     )?.getString(UserSingelton.USERNAME,"")
+
+    fun setUID(newUID: String) {
+        uid = newUID
+    }
+
+    fun getUID(): String {
+        return uid
+    }
 }
 
