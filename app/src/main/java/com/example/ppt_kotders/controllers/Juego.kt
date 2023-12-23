@@ -16,6 +16,11 @@ import com.example.ppt_kotders.MainActivity
 import com.example.ppt_kotders.Notificacion
 import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
+import com.example.ppt_kotders.models.User
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import io.reactivex.rxjava3.core.Observable
 
 class Juego : AppCompatActivity() {
@@ -26,6 +31,7 @@ class Juego : AppCompatActivity() {
     private var animacionEnProgreso = false
 
     var listaAudios = arrayOfNulls<MediaPlayer>(size = 6)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

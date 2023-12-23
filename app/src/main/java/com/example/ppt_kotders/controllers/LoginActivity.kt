@@ -21,10 +21,6 @@ import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
 
-    private val myDBFirebase = FirebaseDatabase
-        .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
-        .reference
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -47,40 +43,18 @@ class LoginActivity : AppCompatActivity() {
             if (nombreplayer == "") {
                 textview.text = getString(R.string.not_valid)
             } else {
-                // Obtener la referencia a la lista de usuarios en Firebase
-                val usersReference = myDBFirebase.child("usuarios")
+                var id = myDBOpenHelper.getUserID(nombreplayer)
 
-                // Agregar un listener para verificar si el correo electrónico ya existe
-                usersReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.e("onCancelled", "Error!", error.toException())
-                    }
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val usersList: MutableList<User> =
-                            snapshot.getValue(object : GenericTypeIndicator<MutableList<User>>() {})
-                                ?: mutableListOf()
+                if (id == 0) { // Si existe el 1er jug guarda el id y accede automatico
+                    myDBOpenHelper.addPlayer(nombreplayer, 0)
+                    // Establecer filtro login
+                }
 
-                        val emailExists = usersList.any { it.email == UserSingelton.getEmail(this@LoginActivity) }
+                id = myDBOpenHelper.getUserID(nombreplayer)
+                val intent = Intent(this, Menu::class.java)
 
-                        if (!emailExists) {
-                            // El correo electrónico no existe, agregar el nuevo usuario
-                            val newUser = User(UserSingelton.getEmail(this@LoginActivity), nombreplayer, "0", "0")
-                            usersList.add(newUser)
-                            Toast.makeText(this@LoginActivity, "Usuario registrado en Firebase", Toast.LENGTH_SHORT).show()
-
-                            // Enviar la lista actualizada a Firebase
-                            usersReference.setValue(usersList)
-
-                            // Resto de tu lógica aquí, por ejemplo, iniciar una nueva actividad
-                            val id = myDBOpenHelper.getUserID(nombreplayer)
-                            val intent = Intent(this@LoginActivity, Menu::class.java)
-                            UserSingelton.id = id
-                            startActivity(intent)
-                        } else {
-                            Toast.makeText(this@LoginActivity, "Usuario ya registrado, utiliza otro correo electrónico", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                })
+                UserSingelton.id = id
+                startActivity(intent)
             }
         }
     }

@@ -15,9 +15,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.example.ppt_kotders.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
 import java.util.Locale
 
 
@@ -30,6 +32,10 @@ class MainActivity : ComponentActivity() {
 
     private val CODE_GOOGLE_SIGN_IN = 2
     private lateinit var mAuth: FirebaseAuth
+
+    private val myDBFirebase = FirebaseDatabase
+        .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
+        .reference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,10 +125,17 @@ class MainActivity : ComponentActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
                     val user = mAuth.currentUser
+
+                    // Actualizar la información del usuario en Realtime Database
+                    updateUserDataInRealtimeDB(user)
+
                     user?.let {
                         // Guardar la información del usuario en SavedPreferencesUser
                         UserSingelton.setEmail(this, it.email ?: "")
                         UserSingelton.setUsername(this, it.displayName ?: "")
+
+                        // Guardar el UID del usuario en el singleton
+                        UserSingelton.setUID(it.uid ?: "")
                     }
                     updateUI(user)
 
@@ -134,6 +147,24 @@ class MainActivity : ComponentActivity() {
                     updateUI(null)
                 }
             }
+    }
+
+    private fun updateUserDataInRealtimeDB(user: FirebaseUser?) {
+        user?.let {
+            val newUser = User(it.email ?: "", it.displayName ?: "", 0, 0)
+
+            // Obtener la referencia a la lista de usuarios en Firebase
+            val usersReference = myDBFirebase.child("usuarios")
+
+            // Agregar el nuevo usuario a la base de datos
+            usersReference.child(it.uid ?: "").setValue(newUser)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Usuario registrado en Firebase Realtime Database")
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "Error al registrar el usuario en Firebase Realtime Database", it)
+                }
+        }
     }
 
 
