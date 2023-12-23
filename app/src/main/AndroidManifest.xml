@@ -24,6 +24,9 @@
         android:theme="@style/Theme.PPT_Kotders"
         tools:targetApi="31">
         <activity
+            android:name=".controllers.Clasificacion"
+            android:exported="false" />
+        <activity
             android:name=".controllers.LoginActivity"
             android:exported="false"
             android:label="@string/app_name"

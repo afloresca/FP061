@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controllers.Clasificacion">
+
+    <TableLayout
+        android:id="@+id/tabla"
+        android:layout_width="match_parent"
+        android:layout_height="316dp"
+        android:stretchColumns="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dip"
+            android:text="Clasificacion"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:gravity="center"
+            android:textColor="@color/black"/>
+
+        <TableRow>
+            <TextView
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text="Posicion"
+                android:gravity="center"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text="Jugador"
+                android:gravity="center"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text="Puntos"
+                android:textColor="@color/black"/>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/posicion_1"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/jugador_1"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/puntos_1"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/black"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_2"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/jugador_2"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/puntos_2"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/black"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_3"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/jugador_3"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_3"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_4"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/jugador_4"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_4"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_5"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/jugador_5"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_5"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_6"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/jugador_6"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_6"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_7"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/jugador_7"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_7"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_8"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/jugador_8"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_8"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_9"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/jugador_9"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_9"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/posicion_10"
+                android:layout_width="60dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/jugador_10"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:gravity="center"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/puntos_10"
+                android:gravity="center"
+                android:layout_width="80dp"
+                android:padding="3dip"
+                android:text=""
+                android:textColor="@color/white"/>
+        </TableRow>
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
