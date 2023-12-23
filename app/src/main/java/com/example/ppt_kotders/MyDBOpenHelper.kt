@@ -49,7 +49,9 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
                     "(${COLUMN_PARTIDA_ID}_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_JUGADOR_NOMBRE VARCHAR (60)," +
                     "$COLUMN_RESULTADO VARCHAR(10), " +
-                    "$COLUMN_FECHAHORA DATETIME DEFAULT CURRENT_TIMESTAMP)"
+                    "$COLUMN_FECHAHORA DATETIME DEFAULT CURRENT_TIMESTAMP," +
+                    "$COLUMN_LATITUD DOUBLE," +
+                    "$COLUMN_LONGITUD DOUBLE)"
             db.execSQL(createTablePartidas)
         } catch (e: SQLiteException) {
             Log.e("$TAG (onCreate)", e.message.toString())
@@ -240,7 +242,7 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
                                 val resultado = cursor.getString(columnIndexResultado)
                                 val fechaHora = cursor.getString(columnIndexFechaHora).toString()
 
-                                val item = JuegoModelo(jugador.nombre, resultado, fechaHora)
+                                val item = JuegoModelo(jugador.nombre, resultado, fechaHora,0.0,0.0)
 
                                 list.add(item)
                             }
