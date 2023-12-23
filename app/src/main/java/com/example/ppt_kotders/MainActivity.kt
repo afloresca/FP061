@@ -139,12 +139,9 @@ class MainActivity : ComponentActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
-            val userName = user.displayName
-            Toast.makeText(this, "¡Hola, $userName!", Toast.LENGTH_SHORT).show()
-
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish()  // Opcional: cierra la actividad actual si ya no es necesaria
+            finish()
         }
     }
 
