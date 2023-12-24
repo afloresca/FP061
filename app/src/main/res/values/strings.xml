@@ -15,5 +15,6 @@
     <string name="user_txt">User</string>
     <string name="not_valid">Insert your name</string>
     <string name="tx_pair">PAIR</string>
-    <string name="your_web_client_id">527837638823-d1tf46mg7ff866m62ars31ikrhblhf6a.apps.googleusercontent.com</string>
+    <string name="your_web_client_id" translatable="false">527837638823-d1tf46mg7ff866m62ars31ikrhblhf6a.apps.googleusercontent.com</string>
+    <string name="bt_bestplayers">Best Players</string>
 </resources>

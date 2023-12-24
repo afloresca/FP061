@@ -20,6 +20,7 @@ class Historico : AppCompatActivity() {
         initRecycleView()
 
         val btSalir = findViewById<Button>(R.id.btSalir)
+        val btjugadores = findViewById<Button>(R.id.btJugadores)
 
 
 
@@ -28,6 +29,14 @@ class Historico : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        btjugadores.setOnClickListener(){
+            val intent = Intent(this, Ranking::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
     }
 
     private fun initRecycleView() {

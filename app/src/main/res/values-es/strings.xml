@@ -16,4 +16,6 @@
     <string name="user_txt">Usuario</string>
     <string name="not_valid">Inserta tu nombre</string>
     <string name="tx_pair">EMPATE</string>
+    <string name="bt_bestplayers">Mejores Jugadores</string>
+
 </resources>

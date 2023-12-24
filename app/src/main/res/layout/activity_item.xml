@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/imageUser"
             android:layout_width="206dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -27,7 +27,7 @@
 
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/puntosUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

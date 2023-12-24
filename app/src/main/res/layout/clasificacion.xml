@@ -19,7 +19,7 @@
             ></Space>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonSal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -43,6 +43,7 @@
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclePlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
