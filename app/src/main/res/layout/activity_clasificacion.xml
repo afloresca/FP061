@@ -76,7 +76,7 @@
             <TableRow>
 
                 <TextView
-                    android:id="@+id/posicion_1"
+                    android:id="@+id/posicion1"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -84,7 +84,7 @@
                     android:text=""
                     android:textColor="@color/black" />
                 <TextView
-                    android:id="@+id/jugador_1"
+                    android:id="@+id/jugador1"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -92,32 +92,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_1"
-                    android:gravity="center"
-                    android:layout_width="80dp"
-                    android:padding="3dip"
-                    android:text=""
-                    android:textColor="@color/black"/>
-            </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:id="@+id/posicion_2"
-                    android:layout_width="60dp"
-                    android:padding="3dip"
-                    android:text=""
-                    android:gravity="center"
-                    android:textColor="@color/black"/>
-                <TextView
-                    android:id="@+id/jugador_2"
-                    android:layout_width="80dp"
-                    android:padding="3dip"
-                    android:text=""
-                    android:gravity="center"
-                    android:textColor="@color/black"/>
-
-                <TextView
-                    android:id="@+id/puntos_2"
+                    android:id="@+id/puntos1"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -127,14 +102,14 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_3"
+                    android:id="@+id/posicion2"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_3"
+                    android:id="@+id/jugador2"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -142,7 +117,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_3"
+                    android:id="@+id/puntos2"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -152,14 +127,14 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_4"
+                    android:id="@+id/posicion3"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_4"
+                    android:id="@+id/jugador3"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -167,7 +142,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_4"
+                    android:id="@+id/puntos3"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -177,14 +152,14 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_5"
+                    android:id="@+id/posicion4"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_5"
+                    android:id="@+id/jugador4"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -192,7 +167,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_5"
+                    android:id="@+id/puntos4"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -202,14 +177,14 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_6"
+                    android:id="@+id/posicion5"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_6"
+                    android:id="@+id/jugador5"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -217,7 +192,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_6"
+                    android:id="@+id/puntos5"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -227,14 +202,14 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_7"
+                    android:id="@+id/posicion6"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_7"
+                    android:id="@+id/jugador6"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -242,7 +217,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_7"
+                    android:id="@+id/puntos6"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -252,14 +227,39 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_8"
+                    android:id="@+id/posicion7"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_8"
+                    android:id="@+id/jugador7"
+                    android:layout_width="80dp"
+                    android:padding="3dip"
+                    android:text=""
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/puntos7"
+                    android:gravity="center"
+                    android:layout_width="80dp"
+                    android:padding="3dip"
+                    android:text=""
+                    android:textColor="@color/black"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:id="@+id/posicion8"
+                    android:layout_width="60dp"
+                    android:padding="3dip"
+                    android:text=""
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/jugador8"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -267,7 +267,7 @@
                     android:textColor="@color/white"/>
 
                 <TextView
-                    android:id="@+id/puntos_8"
+                    android:id="@+id/puntos8"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -277,14 +277,14 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_9"
+                    android:id="@+id/posicion9"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_9"
+                    android:id="@+id/jugador9"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -292,7 +292,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_9"
+                    android:id="@+id/puntos9"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
@@ -302,14 +302,14 @@
 
             <TableRow>
                 <TextView
-                    android:id="@+id/posicion_10"
+                    android:id="@+id/posicion10"
                     android:layout_width="60dp"
                     android:padding="3dip"
                     android:text=""
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/jugador_10"
+                    android:id="@+id/jugador10"
                     android:layout_width="80dp"
                     android:padding="3dip"
                     android:text=""
@@ -317,7 +317,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/puntos_10"
+                    android:id="@+id/puntos10"
                     android:gravity="center"
                     android:layout_width="80dp"
                     android:padding="3dip"
