@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        verificarPermisos()
 
         val btcambio = findViewById<Button>(R.id.button2)
         val btcambio2 = findViewById<Button>(R.id.button1)
