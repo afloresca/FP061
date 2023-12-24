@@ -26,6 +26,7 @@ class Menu : AppCompatActivity() {
 
         val jugarBt = findViewById<Button>(R.id.btjugar)
         val historicoBt = findViewById<Button>(R.id.bthistorico)
+        val clasificacionBt = findViewById<Button>(R.id.btclasificacion)
         val ayudaBt = findViewById<Button>(R.id.btayuda)
         val nombre = findViewById<TextView>(R.id.textNombre)
         val puntos = findViewById<TextView>(R.id.textPuntos)
@@ -85,6 +86,15 @@ class Menu : AppCompatActivity() {
             }
         })
 
+        clasificacionBt.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                jugarBt.viewTreeObserver.removeOnPreDrawListener(this)
+
+                animateButton(clasificacionBt)
+                return true
+            }
+        })
+
 
         jugarBt.setOnClickListener {
 
@@ -102,6 +112,13 @@ class Menu : AppCompatActivity() {
 
         historicoBt.setOnClickListener {
             val intent = Intent(this, Historico::class.java)
+            startActivity(intent)
+            finish()
+
+        }
+
+        clasificacionBt.setOnClickListener {
+            val intent = Intent(this, Clasificacion::class.java)
             startActivity(intent)
             finish()
 

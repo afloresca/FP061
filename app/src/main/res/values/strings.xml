@@ -6,6 +6,11 @@
     <string name="tx_machine">Bot</string>
     <string name="bt_play">Play</string>
     <string name="tx_my_games">My Games</string>
+    <string name="bt_clasificacion">Leaderboard</string>
+    <string name="tx_my_classification">Leaderboard</string>
+    <string name="tv_position">Position</string>
+    <string name="tv_player">Player</string>
+    <string name="tv_points">Points</string>
     <string name="tx_victory">Victory</string>
     <string name="tx_help">Help</string>
     <string name="tx_loose">Defeat</string>
@@ -15,5 +20,4 @@
     <string name="user_txt">User</string>
     <string name="not_valid">Insert your name</string>
     <string name="tx_pair">PAIR</string>
-    <string name="your_web_client_id">527837638823-d1tf46mg7ff866m62ars31ikrhblhf6a.apps.googleusercontent.com</string>
 </resources>

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
     tools:context=".controllers.LoginActivity">
 
 
@@ -15,6 +17,7 @@
         android:layout_marginTop="180dp"
         android:ems="10"
         android:fontFamily="sans-serif"
+        android:textColor="@color/black"
         android:hint="@string/user_txt"
         android:inputType="text"
         android:shadowDx="@integer/material_motion_duration_long_1"
