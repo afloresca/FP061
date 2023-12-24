@@ -23,9 +23,8 @@ class Ranking : AppCompatActivity() {
         setContentView(R.layout.clasificacion)
         initRecycleView2()
 
+
         val btSalir = findViewById<Button>(R.id.buttonSal)
-
-
 
 
         btSalir.setOnClickListener() {
@@ -35,56 +34,56 @@ class Ranking : AppCompatActivity() {
         }
     }
 
-    private fun initRecycleView2() {
-        try {
-            if (!isFinishing()){
-            val recyclerView = findViewById<RecyclerView>(R.id.recyclePlayer)
-            getAllUsersFromRealtimeDB { topPlayersList ->
-                // Configura el RecyclerView con el adaptador y la lista de los mejores jugadores
-                recyclerView.layoutManager = LinearLayoutManager(this)
-                recyclerView.adapter = PlayerAdapter(topPlayersList)
-            }
-            }
-        } catch (e: Exception) {
-            Log.e("initRecycleView2", "Error al inicializar RecyclerView: ${e.message}", e)
-        }
-    }
+       private fun initRecycleView2() {
+           try {
+               if (!isFinishing()){
+               val recyclerView = findViewById<RecyclerView>(R.id.recyclePlayer)
+               getAllUsersFromRealtimeDB { topPlayersList ->
+                   // Configura el RecyclerView con el adaptador y la lista de los mejores jugadores
+                   recyclerView.layoutManager = LinearLayoutManager(this)
+                   recyclerView.adapter = PlayerAdapter(topPlayersList)
+               }
+               }
+           } catch (e: Exception) {
+               Log.e("initRecycleView2", "Error al inicializar RecyclerView: ${e.message}", e)
+           }
+       }
 
-    private fun getAllUsersFromRealtimeDB(callback: (List<User>) -> Unit) {
-        val myDBFirebase = FirebaseDatabase
-            .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
-            .reference
-        val dbReference = myDBFirebase.child("usuarios")
+       private fun getAllUsersFromRealtimeDB(callback: (List<User>) -> Unit) {
+           val myDBFirebase = FirebaseDatabase
+               .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
+               .reference
+           val dbReference = myDBFirebase.child("usuarios")
 
-        // Escuchar cambios en la base de datos
-        dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                // Manejar el evento de cancelación (error en la lectura de datos)
-                Log.e("onCancelled", "Error!", error.toException())
-                callback(emptyList()) // Devolver una lista vacía en caso de error
-            }
+           // Escuchar cambios en la base de datos
+           dbReference.addListenerForSingleValueEvent(object : ValueEventListener {
+               override fun onCancelled(error: DatabaseError) {
+                   // Manejar el evento de cancelación (error en la lectura de datos)
+                   Log.e("onCancelled", "Error!", error.toException())
+                   callback(emptyList()) // Devolver una lista vacía en caso de error
+               }
 
-            override fun onDataChange(snapshot: DataSnapshot) {
+               override fun onDataChange(snapshot: DataSnapshot) {
 
-                val userList = mutableListOf<User>()
-                    // Recorrer los nodos de usuarios y convertirlos a objetos User
-                    for (userSnapshot in snapshot.children) {
-                        val email = userSnapshot.child("email").getValue(String::class.java)
-                        val nombre = userSnapshot.child("nombre").getValue(String::class.java)
-                        val puntos = userSnapshot.child("puntos").getValue(Int::class.java) ?: 0
-                        val victorias = userSnapshot.child("victorias").getValue(Int::class.java) ?: 0
+                   val userList = mutableListOf<User>()
+                       // Recorrer los nodos de usuarios y convertirlos a objetos User
+                       for (userSnapshot in snapshot.children) {
+                           val email = userSnapshot.child("email").getValue(String::class.java)
+                           val nombre = userSnapshot.child("nombre").getValue(String::class.java)
+                           val puntos = userSnapshot.child("puntos").getValue(Int::class.java) ?: 0
+                           val victorias = userSnapshot.child("victorias").getValue(Int::class.java) ?: 0
 
-                        val user = User( email.orEmpty(), nombre.orEmpty(), puntos, victorias)
-                        userList.add(user)
-                    }
+                           val user = User( email.orEmpty(), nombre.orEmpty(), puntos, victorias)
+                           userList.add(user)
+                       }
 
-                val listamejores = userList.sortedByDescending { it.victorias }
-                val topPlayers = listamejores.take(10)
+                   val listamejores = userList.sortedByDescending { it.victorias }
+                   val topPlayers = listamejores.take(10)
 
-                callback(topPlayers)
-            }
-        })
-    }
+                   callback(topPlayers)
+               }
+           })
+       }
 
 
 }
