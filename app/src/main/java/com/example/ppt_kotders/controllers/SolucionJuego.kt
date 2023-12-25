@@ -12,7 +12,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
+import androidx.lifecycle.lifecycleScope
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +24,17 @@ import androidx.core.content.ContextCompat
 import com.example.ppt_kotders.MainActivity
 import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
+import com.example.ppt_kotders.models.User
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.example.ppt_kotders.FirebaseApiService
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -30,9 +43,21 @@ import java.util.TimeZone
 class SolucionJuego : AppCompatActivity() {
 
     var lista = arrayOfNulls<MediaPlayer>(size = 2)
+    private var condicion: Int = 0
 
     private val CALENDAR_WRITE_PERMISSION_REQUEST_CODE = 101
     private val CALENDAR_READ_PERMISSION_REQUEST_CODE = 102
+
+    private val myDBFirebase = FirebaseDatabase
+        .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
+        .reference
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val service = retrofit.create(FirebaseApiService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +80,69 @@ class SolucionJuego : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        fun updateDataRealtimeDB(email: String, nombre: String, nuevosPuntos: Int, nuevasVictorias: Int) {
+            val userUID = UserSingelton.getUID()
+            val dbReference = myDBFirebase.child("usuarios").child(userUID)
+
+            // Crear un mapa para actualizar solo puntos y victorias
+            val userUpdate = HashMap<String, Any>()
+            userUpdate["email"] = email
+            userUpdate["nombre"] = nombre
+            userUpdate["puntos"] = nuevosPuntos
+            userUpdate["victorias"] = nuevasVictorias
+
+            // Actualizar la base de datos con el nuevo mapa
+            dbReference.updateChildren(userUpdate)
+                .addOnSuccessListener {
+                    Log.d("updateDataRealtimeDB", "Datos actualizados exitosamente.")
+                }
+                .addOnFailureListener {
+                    Log.e("updateDataRealtimeDB", "Error al actualizar datos.", it)
+                }
+        }
+
+        fun changeUserDataRealtimeDB(user: User?) {
+            if (user != null) {
+                val nombre = user.nombre
+                val email = user.email
+                val puntosActuales = user.puntos ?: 0
+                val victoriasActuales = user.victorias ?: 0
+
+
+                val nuevosPuntos = puntosActuales + 1
+                val nuevasVictorias = victoriasActuales + 1
+
+                // Actualizar solo los campos de puntos y victorias en la base de datos
+                updateDataRealtimeDB(email!!, nombre!!, nuevosPuntos, nuevasVictorias)
+            }
+        }
+
+        fun readUserDataFromRealtimeDB() {
+            val userUID = UserSingelton.getUID()
+            val dbReference = myDBFirebase.child("usuarios")
+
+            // Buscar al usuario por su UID en la base de datos en tiempo real
+            dbReference.child(userUID).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("onCancelled", "Error!", error.toException())
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        // El usuario existe en la base de datos
+                        val user = snapshot.getValue(User::class.java)
+
+                        // Lógica para procesar los datos leídos (si es necesario)
+                        changeUserDataRealtimeDB(user)
+                    } else {
+                        Log.e("onDataChange", "Usuario no encontrado en la base de datos.")
+                        // Puedes manejar el caso en que el usuario no se encuentre en la base de datos.
+                    }
+                }
+            })
+        }
+
         when (condicion) {
 
             1 -> {
@@ -62,12 +150,16 @@ class SolucionJuego : AppCompatActivity() {
                 texto.text = getString(R.string.tx_victory)
                 lista[0]?.start()
                 buttonSave.visibility = android.view.View.VISIBLE
+                readUserDataFromRealtimeDB()
+                mostrarPuntosPremioVictoria()
             }
 
             2 -> {
                 imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
                 texto.text = getString(R.string.tx_loose)
                 lista[1]?.start()
+                mostrarPuntosPremioDerrota()
+
             }
 
             0 -> logout() // Por defecto -> error del juego
@@ -223,6 +315,137 @@ class SolucionJuego : AppCompatActivity() {
             insertEventToCalendar()
         }
     }
+
+    private suspend fun obtenerPuntosUsuario(): Int {
+        val userUID = UserSingelton.getUID()
+        return try {
+            val response = service.getPuntosUser(userUID)
+            if (response.isSuccessful) {
+                response.body()?.puntos ?: 0
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                0
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            0
+        }
+    }
+
+    private fun mostrarPuntosPremioVictoria() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val puntosPremio = obtenerPuntosPremio()
+            val puntosUsuario = obtenerPuntosUsuario()
+
+            // Sumar puntos de premio a los puntos del usuario
+            val nuevosPuntosUsuario = puntosUsuario + puntosPremio
+
+            // Actualizar los puntos del usuario en la base de datos
+            actualizarPuntosUsuario(UserSingelton.getUID(), nuevosPuntosUsuario)
+
+            Toast.makeText(
+                this@SolucionJuego,
+                "¡Enhorabuena, has ganado el bote! Ahora tienes $nuevosPuntosUsuario puntos!",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            // Reiniciar los puntos del premio a 0
+            reiniciarPuntosPremio()
+        }
+    }
+
+    private fun mostrarPuntosUsuario() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val puntosAntesDeActualizar = obtenerPuntosUsuario()
+            // Mostrar los puntos actuales antes de la actualización
+            Toast.makeText(
+                this@SolucionJuego,
+                "Puntos antes de la actualización: $puntosAntesDeActualizar",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private suspend fun actualizarPuntosUsuario(uid: String, nuevosPuntos: Int) {
+        try {
+            val response = service.actualizarPuntosUsuario(uid, nuevosPuntos)
+            if (response.isSuccessful) {
+                Log.d("actualizarPuntosUsuario", "Puntos de usuario actualizados exitosamente.")
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                Log.e("actualizarPuntosUsuario", "Error al actualizar puntos de usuario.")
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            Log.e("actualizarPuntosUsuario", "Excepción al actualizar puntos de usuario.", e)
+        }
+    }
+
+    private suspend fun reiniciarPuntosPremio() {
+        try {
+            // Llamamos al endpoint para establecer los puntos del premio a 0
+            val response = service.putPremio(0)
+            if (response.isSuccessful) {
+                Log.d("reiniciarPuntosPremio", "Puntos de premio reiniciados exitosamente.")
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                Log.e("reiniciarPuntosPremio", "Error al reiniciar puntos de premio.")
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            Log.e("reiniciarPuntosPremio", "Excepción al reiniciar puntos de premio.", e)
+        }
+    }
+
+
+    private suspend fun obtenerPuntosPremio(): Int {
+        return try {
+            val response = service.getPremio()
+            if (response.isSuccessful) {
+                response.body() ?: 0
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                0
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            0
+        }
+    }
+
+    private suspend fun actualizarPuntosPremioDerrota(nuevosPuntos: Int) {
+        try {
+            val response = service.putPremio(nuevosPuntos)
+            if (response.isSuccessful) {
+                Log.d("actualizarPuntosPremio", "Puntos de premio actualizados exitosamente.")
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                Log.e("actualizarPuntosPremio", "Error al actualizar puntos de premio.")
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            Log.e("actualizarPuntosPremio", "Excepción al actualizar puntos de premio.", e)
+        }
+    }
+
+    private fun mostrarPuntosPremioDerrota() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            var puntosPremio = obtenerPuntosPremio()
+            actualizarPuntosPremioDerrota(puntosPremio + 1)
+            puntosPremio = obtenerPuntosPremio()
+            Toast.makeText(
+                this@SolucionJuego,
+                "¡El bote ha subido, ahora hay $puntosPremio puntos de premio!",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
 
     fun logout(){ // Detecta el estado default y rectifica el error logout
         val intent = Intent(this, MainActivity::class.java)

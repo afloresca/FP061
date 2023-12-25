@@ -72,7 +72,7 @@
         android:textStyle="bold" />
     <Space
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="25dp"/>
 
     <Button
         android:id="@+id/bthistorico"
@@ -87,7 +87,19 @@
         android:textStyle="bold" />
     <Space
         android:layout_width="match_parent"
-        android:layout_height="30dp"/>
+        android:layout_height="25dp"/>
+
+    <Button
+        android:id="@+id/btclasificacion"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#E46F0D"
+        android:fontFamily="@font/annie_use_your_telescope"
+        android:text="@string/bt_clasificacion"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -101,7 +113,7 @@
             android:layout_height="65dp"
             android:layout_gravity="center"
             android:layout_margin="20dp"
-            android:src="@drawable/continuar_1_" />
+            android:src="@drawable/logokotders" />
 
         <ImageView
             android:id="@+id/logouoc"

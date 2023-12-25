@@ -6,9 +6,14 @@
     <string name="tx_machine">Bot</string>
     <string name="bt_play">Play</string>
     <string name="tx_my_games">My Games</string>
+    <string name="bt_clasificacion">Leaderboard</string>
+    <string name="tx_my_classification">Leaderboard</string>
+    <string name="tv_position">Position</string>
+    <string name="tv_player">Player</string>
+    <string name="tv_points">Points</string>
     <string name="tx_victory">Victory</string>
-    <string name ="tx_help">Help</string>
-    <string name ="tx_loose">Defeat</string>
+    <string name="tx_help">Help</string>
+    <string name="tx_loose">Defeat</string>
     <string name="tx_round">Round</string>
     <string name="tx_choose">Choose your option</string>
     <string name="bt_continue">Continue</string>

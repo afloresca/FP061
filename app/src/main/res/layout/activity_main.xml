@@ -16,35 +16,21 @@
             android:layout_height="287dp"
             android:src="@drawable/ppt" />
 
-        <EditText
-            android:id="@+id/editTextText2"
-            android:shadowDx="@integer/material_motion_duration_long_1"
-            android:layout_width="match_parent"
-            android:layout_height="107dp"
-            android:ems="10"
-            android:fontFamily="sans-serif"
-            android:hint="@string/user_txt"
-            android:inputType="text"
-            android:layout_marginHorizontal="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="34sp" />
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/design_default_color_error" />
 
         <Button
-            android:id="@+id/btlog"
             android:layout_width="match_parent"
-            android:layout_height="88dp"
-            android:backgroundTint="@color/design_default_color_error"
-            android:text="Login"
-            android:layout_marginHorizontal="20dp"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/google"
+            android:onClick="callSignInGoogle"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="30dp"
+            android:text="Sign in with google"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,8 +66,8 @@
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/continuar_1_" />
+            android:layout_height="200dp"
+            android:src="@drawable/logokotders" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

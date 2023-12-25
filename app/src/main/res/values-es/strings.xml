@@ -7,6 +7,11 @@
     <string name="tx_machine">Bot</string>
     <string name="bt_play">Jugar</string>
     <string name="tx_my_games">Mis Partidas</string>
+    <string name="bt_clasificacion">Clasificacion</string>
+    <string name="tx_my_classification">Clasificacion</string>
+    <string name="tv_position">Posicion</string>
+    <string name="tv_player">Jugador</string>
+    <string name="tv_points">Puntos</string>
     <string name="tx_victory">Victoria</string>
     <string name="tx_help">Ayuda</string>
     <string name="tx_loose">Derrota</string>

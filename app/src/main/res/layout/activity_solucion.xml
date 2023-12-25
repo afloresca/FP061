@@ -67,7 +67,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:src="@drawable/continuar_1_" />
+            android:src="@drawable/logokotders" />
 
         <TextView
             android:id="@+id/textView"
