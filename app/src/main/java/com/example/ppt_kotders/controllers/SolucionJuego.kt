@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.ppt_kotders.FirebaseApiService
 import com.example.ppt_kotders.MainActivity
 import com.example.ppt_kotders.R
 import com.example.ppt_kotders.UserSingelton
@@ -30,9 +31,17 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import com.squareup.moshi.Moshi
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStreamReader
 import java.io.OutputStream
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.TimeZone
 
 class SolucionJuego : AppCompatActivity() {
@@ -45,6 +54,9 @@ class SolucionJuego : AppCompatActivity() {
     private val myDBFirebase = FirebaseDatabase
         .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
         .reference
+    var puntospremio = 0
+    val endpointUrl =
+        "https://kotders-dbenitez-default-rtdb.firebaseio.com/premios/1/puntos"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +64,7 @@ class SolucionJuego : AppCompatActivity() {
 
         lista[0]=MediaPlayer.create(this,R.raw.fireworks)
         lista[1]=MediaPlayer.create(this,R.raw.trueno)
+
 
         val idUser = UserSingelton.id
         val condicion = UserSingelton.estado
@@ -62,9 +75,68 @@ class SolucionJuego : AppCompatActivity() {
         val textodata = findViewById<TextView>(R.id.textView)
         textodata.text = idUser.toString()
 
+
+
+
         if (idUser == -1) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+
+        fun obtenerPuntos(endpointUrl: String):Int {
+            var puntos = 0
+            try {
+                val url = URL(endpointUrl)
+                val connection = url.openConnection() as HttpURLConnection
+
+                connection.requestMethod = "GET"
+
+                val responseCode = connection.responseCode
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val inputStream = connection.inputStream
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+                    val stringBuilder = StringBuilder()
+                    var line: String?
+
+                    while (reader.readLine().also { line = it } != null) {
+                        stringBuilder.append(line)
+                    }
+
+                    puntos = stringBuilder.toString().toInt()
+                } else {
+                    // Manejar error en la respuesta
+                    Log.e("ObtenerPuntos", "Error en la respuesta: $responseCode")
+                }
+
+            } catch (e: Exception) {
+                // Manejar error en la solicitud
+                Log.e("ObtenerPuntos", "Error en la solicitud: ${e.message}")
+            }
+            return puntos
+        }
+
+        puntospremio = obtenerPuntos(endpointUrl)
+
+        fun sobrescribirPuntos(endpointUrl: String, nuevosPuntos: Int) {
+            val url = URL(endpointUrl)
+            val connection = url.openConnection() as HttpURLConnection
+
+            connection.requestMethod = "PUT"
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.doOutput = true
+
+            val outputStream = OutputStreamWriter(connection.outputStream)
+            outputStream.write(nuevosPuntos.toString())
+            outputStream.flush()
+            outputStream.close()
+
+            val responseCode = connection.responseCode
+
+            if (responseCode != HttpURLConnection.HTTP_OK) {
+                // Manejar error en la respuesta
+                throw RuntimeException("Error en la solicitud PUT. Código de respuesta: $responseCode")
+            }
         }
 
         fun updateDataRealtimeDB(email: String, nombre: String, nuevosPuntos: Int, nuevasVictorias: Int) {
@@ -90,13 +162,12 @@ class SolucionJuego : AppCompatActivity() {
 
         fun changeUserDataRealtimeDB(user: User?) {
             if (user != null) {
+                val premio =puntospremio
                 val nombre = user.nombre
                 val email = user.email
                 val puntosActuales = user.puntos ?: 0
                 val victoriasActuales = user.victorias ?: 0
-
-
-                val nuevosPuntos = puntosActuales + 1
+                val nuevosPuntos = puntosActuales + 1 + premio
                 val nuevasVictorias = victoriasActuales + 1
 
                 // Actualizar solo los campos de puntos y victorias en la base de datos
@@ -137,12 +208,15 @@ class SolucionJuego : AppCompatActivity() {
                 lista[0]?.start()
                 buttonSave.visibility = android.view.View.VISIBLE
                 readUserDataFromRealtimeDB()
+                sobrescribirPuntos(endpointUrl,0)
             }
 
             2 -> {
                 imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
                 texto.text = getString(R.string.tx_loose)
                 lista[1]?.start()
+                val prize = puntospremio +1
+                sobrescribirPuntos(endpointUrl,prize)
             }
 
             0 -> logout() // Por defecto -> error del juego
