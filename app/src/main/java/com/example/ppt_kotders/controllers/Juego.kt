@@ -116,7 +116,7 @@ class Juego : AppCompatActivity() {
             if (puntj == 3 || puntm == 3) {
                 when {
                     puntj == 3 -> {
-                        UserSingelton.estado = 2
+                        UserSingelton.estado = 1
                         win().subscribe()
                     }
                     puntm == 3 -> {

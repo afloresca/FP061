@@ -20,9 +20,9 @@ interface FirebaseApiService {
     @PUT("premios/1/puntos.json")
     suspend fun putPremio(@Body value: Int): Response<Void>
 
-    @GET("usuarios/{id}/puntos.json")
-    suspend fun getPuntosId(): Response<User>
+    @GET("usuarios/{uid}/puntos.json")
+    suspend fun getPuntosUser(@Path("uid") uid: String): Response<User>
 
-    @PUT("usuarios/{id}/puntos.json")
-    suspend fun updatePuntos(@Path("id") id: String, @Body value: Int): Response<Void>
+    @PUT("usuarios/{uid}/puntos.json")
+    suspend fun actualizarPuntosUsuario(@Path("uid") uid: String, @Body value: Int): Response<Void>
 }

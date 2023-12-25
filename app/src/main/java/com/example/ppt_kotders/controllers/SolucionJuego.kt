@@ -57,7 +57,7 @@ class SolucionJuego : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val firebaseApiService = retrofit.create(FirebaseApiService::class.java)
+    private val service = retrofit.create(FirebaseApiService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,6 +151,7 @@ class SolucionJuego : AppCompatActivity() {
                 lista[0]?.start()
                 buttonSave.visibility = android.view.View.VISIBLE
                 readUserDataFromRealtimeDB()
+                mostrarPuntosPremioVictoria()
             }
 
             2 -> {
@@ -315,9 +316,94 @@ class SolucionJuego : AppCompatActivity() {
         }
     }
 
-    private suspend fun obtenerPuntosPremioDerrota(): Int {
+    private suspend fun obtenerPuntosUsuario(): Int {
+        val userUID = UserSingelton.getUID()
         return try {
-            val response = firebaseApiService.getPremio()
+            val response = service.getPuntosUser(userUID)
+            if (response.isSuccessful) {
+                response.body()?.puntos ?: 0
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                0
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            0
+        }
+    }
+
+    private fun mostrarPuntosPremioVictoria() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val puntosPremio = obtenerPuntosPremio()
+            val puntosUsuario = obtenerPuntosUsuario()
+
+            // Sumar puntos de premio a los puntos del usuario
+            val nuevosPuntosUsuario = puntosUsuario + puntosPremio
+
+            // Actualizar los puntos del usuario en la base de datos
+            actualizarPuntosUsuario(UserSingelton.getUID(), nuevosPuntosUsuario)
+
+            Toast.makeText(
+                this@SolucionJuego,
+                "¡Enhorabuena, has ganado el bote! Ahora tienes $nuevosPuntosUsuario puntos!",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            // Reiniciar los puntos del premio a 0
+            reiniciarPuntosPremio()
+        }
+    }
+
+    private fun mostrarPuntosUsuario() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val puntosAntesDeActualizar = obtenerPuntosUsuario()
+            // Mostrar los puntos actuales antes de la actualización
+            Toast.makeText(
+                this@SolucionJuego,
+                "Puntos antes de la actualización: $puntosAntesDeActualizar",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private suspend fun actualizarPuntosUsuario(uid: String, nuevosPuntos: Int) {
+        try {
+            val response = service.actualizarPuntosUsuario(uid, nuevosPuntos)
+            if (response.isSuccessful) {
+                Log.d("actualizarPuntosUsuario", "Puntos de usuario actualizados exitosamente.")
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                Log.e("actualizarPuntosUsuario", "Error al actualizar puntos de usuario.")
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            Log.e("actualizarPuntosUsuario", "Excepción al actualizar puntos de usuario.", e)
+        }
+    }
+
+    private suspend fun reiniciarPuntosPremio() {
+        try {
+            // Llamamos al endpoint para establecer los puntos del premio a 0
+            val response = service.putPremio(0)
+            if (response.isSuccessful) {
+                Log.d("reiniciarPuntosPremio", "Puntos de premio reiniciados exitosamente.")
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                Log.e("reiniciarPuntosPremio", "Error al reiniciar puntos de premio.")
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            Log.e("reiniciarPuntosPremio", "Excepción al reiniciar puntos de premio.", e)
+        }
+    }
+
+
+    private suspend fun obtenerPuntosPremio(): Int {
+        return try {
+            val response = service.getPremio()
             if (response.isSuccessful) {
                 response.body() ?: 0
             } else {
@@ -333,7 +419,7 @@ class SolucionJuego : AppCompatActivity() {
 
     private suspend fun actualizarPuntosPremioDerrota(nuevosPuntos: Int) {
         try {
-            val response = firebaseApiService.putPremio(nuevosPuntos)
+            val response = service.putPremio(nuevosPuntos)
             if (response.isSuccessful) {
                 Log.d("actualizarPuntosPremio", "Puntos de premio actualizados exitosamente.")
             } else {
@@ -349,12 +435,12 @@ class SolucionJuego : AppCompatActivity() {
 
     private fun mostrarPuntosPremioDerrota() {
         lifecycleScope.launch(Dispatchers.Main) {
-            var puntosPremio = obtenerPuntosPremioDerrota()
+            var puntosPremio = obtenerPuntosPremio()
             actualizarPuntosPremioDerrota(puntosPremio + 1)
-            puntosPremio = obtenerPuntosPremioDerrota()
+            puntosPremio = obtenerPuntosPremio()
             Toast.makeText(
                 this@SolucionJuego,
-                "¡El bote ha subido, ahora hay $puntosPremio puntos del premio!",
+                "¡El bote ha subido, ahora hay $puntosPremio puntos de premio!",
                 Toast.LENGTH_SHORT
             ).show()
         }
