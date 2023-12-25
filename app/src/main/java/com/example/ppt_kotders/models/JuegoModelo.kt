@@ -15,4 +15,5 @@ class JuegoModelo{
         this.longitud = longitud
         this.latitud = latitud
     }
+
 }

@@ -242,7 +242,9 @@ class MyDBOpenHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) 
                                 val resultado = cursor.getString(columnIndexResultado)
                                 val fechaHora = cursor.getString(columnIndexFechaHora).toString()
 
+
                                 val item = JuegoModelo(jugador.nombre, resultado, fechaHora, 0.0, 0.0)
+
 
                                 list.add(item)
                             }
