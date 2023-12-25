@@ -2,7 +2,6 @@ package com.example.ppt_kotders.controllers
 
 import android.Manifest
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -15,6 +14,7 @@ import android.provider.CalendarContract
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
+import androidx.lifecycle.lifecycleScope
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -28,8 +28,13 @@ import com.example.ppt_kotders.models.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
+import com.example.ppt_kotders.FirebaseApiService
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -38,6 +43,7 @@ import java.util.TimeZone
 class SolucionJuego : AppCompatActivity() {
 
     var lista = arrayOfNulls<MediaPlayer>(size = 2)
+    private var condicion: Int = 0
 
     private val CALENDAR_WRITE_PERMISSION_REQUEST_CODE = 101
     private val CALENDAR_READ_PERMISSION_REQUEST_CODE = 102
@@ -45,6 +51,13 @@ class SolucionJuego : AppCompatActivity() {
     private val myDBFirebase = FirebaseDatabase
         .getInstance("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
         .reference
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("https://kotders-dbenitez-default-rtdb.firebaseio.com/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val firebaseApiService = retrofit.create(FirebaseApiService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +79,7 @@ class SolucionJuego : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
 
         fun updateDataRealtimeDB(email: String, nombre: String, nuevosPuntos: Int, nuevasVictorias: Int) {
             val userUID = UserSingelton.getUID()
@@ -143,6 +157,8 @@ class SolucionJuego : AppCompatActivity() {
                 imagen.setImageResource(R.drawable.historico_1_photoroom_png_photoroom)
                 texto.text = getString(R.string.tx_loose)
                 lista[1]?.start()
+                mostrarPuntosPremioDerrota()
+
             }
 
             0 -> logout() // Por defecto -> error del juego
@@ -298,6 +314,52 @@ class SolucionJuego : AppCompatActivity() {
             insertEventToCalendar()
         }
     }
+
+    private suspend fun obtenerPuntosPremioDerrota(): Int {
+        return try {
+            val response = firebaseApiService.getPremio()
+            if (response.isSuccessful) {
+                response.body() ?: 0
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                0
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            0
+        }
+    }
+
+    private suspend fun actualizarPuntosPremioDerrota(nuevosPuntos: Int) {
+        try {
+            val response = firebaseApiService.putPremio(nuevosPuntos)
+            if (response.isSuccessful) {
+                Log.d("actualizarPuntosPremio", "Puntos de premio actualizados exitosamente.")
+            } else {
+                // Manejar el caso en que la solicitud no fue exitosa
+                Log.e("actualizarPuntosPremio", "Error al actualizar puntos de premio.")
+            }
+        } catch (e: Exception) {
+            // Manejar cualquier excepción
+            e.printStackTrace()
+            Log.e("actualizarPuntosPremio", "Excepción al actualizar puntos de premio.", e)
+        }
+    }
+
+    private fun mostrarPuntosPremioDerrota() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            var puntosPremio = obtenerPuntosPremioDerrota()
+            actualizarPuntosPremioDerrota(puntosPremio + 1)
+            puntosPremio = obtenerPuntosPremioDerrota()
+            Toast.makeText(
+                this@SolucionJuego,
+                "¡El bote ha subido, ahora hay $puntosPremio puntos del premio!",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
 
     fun logout(){ // Detecta el estado default y rectifica el error logout
         val intent = Intent(this, MainActivity::class.java)
